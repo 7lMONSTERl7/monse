@@ -1,0 +1,34 @@
+.container {
+  height: -moz-fit-content !important;
+  height: fit-content !important;
+}
+
+.heading {
+  height: 4em;
+}
+
+.img-thumbnail {
+  position: absolute;
+  bottom: -30%;
+  align-items: stretch;
+}
+
+.css {
+  margin-bottom: 10em;
+}
+
+.details {
+  display: flex;
+  justify-content: space-between;
+}
+
+@media (max-width: 700px) {
+  .details {
+    flex-direction: column;
+  }
+}
+@media (max-width: 455px) {
+  .nav-mail {
+    display: none;
+  }
+}/*# sourceMappingURL=globals.css.map */

@@ -1,0 +1,95 @@
+
+"use client"
+
+import React, { useState,useEffect } from 'react';
+import Image from 'next/image';
+import { Requests } from '../utiles/Requests'
+
+interface PostProps {
+    key: number;
+    postID: number;
+    authorId: number;
+    user: string;
+    title: string;
+    userImg: any;
+    postImg: any;
+    postContent: string;
+    postComments: string;
+    ago: string;
+    likesCount: number;
+    isReacted: boolean;
+}
+
+function Post({ postID, authorId, user, title, userImg, postImg, postContent, postComments, ago, likesCount, isReacted }: PostProps) {
+    const [reacted, setLocalReacted] = useState<boolean>(isReacted);
+    const [localLikesCount, setLocalLikesCount] = useState(likesCount);
+
+    async function react() {
+        const Req = new Requests()
+        await Req.react(postID, reacted, setLocalReacted, setLocalLikesCount,localLikesCount,setLocalReacted);
+    }
+   
+
+    return (
+        <div className="card shadow col-12 my-4" key={postID}>
+            <div className="card-header d-flex">
+                <Image
+                    className="img-thumbnail border border-2 rounded-circle"
+                    src={userImg || "/default-user.png"}
+                    alt={`${user}'s profile picture`}
+                    id='thumb'
+                    height='50'
+                    width='50'
+                    onClick={() => { window.location.href = `/profile?id=${authorId}` }}
+                />
+                <div className="user-details">
+                    <h5 className="mx-2 mb-0">{user}</h5>
+                    <small className="mx-3">{ago}</small>
+                </div>
+            </div>
+            <div className="card-body w-100">
+                <div className="img">
+                    {   
+                        postImg && postImg != undefined ? 
+                        
+                            <Image
+                                className="img-fluid"
+                                src={postImg}
+                                alt="Post image"
+                                width={1000}
+                                height={800}
+                            />
+                        :
+                            null
+                    }
+                </div>
+                
+                <h5 className="card-title mt-4">{title}</h5>
+                <p className="card-text">{postContent}</p>
+                <div className="d-flex justify-content-between align-items-center">
+                    <div className="post-details mt-3 position-relative w-100">
+                        <hr />
+                        <span>
+                            <i className="fas fa-pen"></i>
+                            {`(${postComments}) comments`}
+                        </span>
+                        <span id="react">
+                            <i
+                                className={`${reacted ? 'fas' : 'far'} fa-thumbs-up mx-2`}
+                                id="like"
+                                onClick={react}
+                            >
+                            </i>
+                            <em className="count">
+                                {localLikesCount}
+                            </em>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+}
+
+export default Post;
+
