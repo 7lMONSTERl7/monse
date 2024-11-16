@@ -16,9 +16,16 @@ interface Post{
 function PostModal({ url,createPost,postData,setPostData,setCreatePost,setPosts }:Post){
     async function publishPost(){
         const Req = new Requests
-        await Req.publishPost(postData,setCreatePost)
-        const data = await Req.getPosts(url)
-        await setPosts(data)
+        try{
+            await Req.publishPost(postData,setCreatePost)
+            const data = await Req.getPosts(url)
+            await setPosts(data)
+        }catch{
+            return
+        }
+        
+
+        
     }
     return (
         <>

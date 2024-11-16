@@ -10,7 +10,7 @@ function Toast({ message }:ToastParams) {
         <div className={`toast w-100 my-3 d-flex align-items-center justify-content-between ${inboxAlert ? "show" : "hide"}`}>
             <div className="d-flex mx-4 align-items-start">
                 <img
-                    src={`https://sloth-possible-reindeer.ngrok-free.app${message.sender.profile_picture}`}
+                    src={`${localStorage.getItem('baseUrl')}${message.sender.profile_picture}`}
                     className="rounded-circle mr-1 my-2"
                     alt=""
                     width={40}

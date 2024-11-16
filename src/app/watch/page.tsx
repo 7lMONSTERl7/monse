@@ -25,8 +25,8 @@ interface Video{
     comments_count: any,
     created_at:string,
     likes_count: number,
-    isReacted: boolean,
     setReacted:any,
+    likes:any;
 }
 
 interface userData{
@@ -60,6 +60,7 @@ export default function Home() {
     const [isReacted,setReacted] = useState<boolean>(false)
     const [url,setUrl] = useState<string>(baseUrl + '/api/videos/')
     const [hasMore,setHasMore] = useState<boolean>(true)
+    const [i, setMe ] = useState<any >({})
     
     
     
@@ -75,13 +76,13 @@ export default function Home() {
         setHasMore(true);
     } 
     
-    async function whoAmI(){
-        const Req = new Requests()
-        const data = await Req.whoAmI()
-        data != undefined ?
-            localStorage.setItem('me',JSON.stringify(data))
-        : null
-        
+    async function whoAmI() {
+        const Req = new Requests();
+        const data = await Req.whoAmI();
+        if (data && token) {
+            setMe(data)
+            localStorage.setItem("me",JSON.stringify(data))
+        } 
     }
 
     async function myInfoController(){
@@ -110,7 +111,7 @@ export default function Home() {
 
 
     useEffect(()=>{
-        token ? setAuthStatus(true) : setAuthStatus(false)  
+        token ? (setAuthStatus(true),whoAmI()) : setAuthStatus(false)  
         myInfoController()
     },[token])
 
@@ -134,11 +135,10 @@ export default function Home() {
         <main className={mode ? mode : "light"} data-bs-theme={mode}>
             <Modal
                 userData={userData}
-                setData = {setUserData}
+                setData={setUserData}
                 setAuthStatus={setAuthStatus}
                 showModal={showModal}
-                setShowModal={setShowModal}
-            />
+                setShowModal={setShowModal} whoAmI={undefined} setME={undefined}            />
             <RegisterModal
                 registerData={registerData}
                 setRegisterData={setRegisterData}
@@ -169,9 +169,8 @@ export default function Home() {
                             setAuthStatus={setAuthStatus}
                             setShowModal={setShowModal}
                             setShowRegister={setShowRegister}
-                            mode = {mode}
-                            setMode = {setMode}
-                        />
+                            mode={mode}
+                            setMode={setMode} Me={undefined}                        />
                     </div>
                     <div className="posts d-flex flex-column align-items-center mt-5 pt-5 w-100">
                         <InfiniteScroll
@@ -213,8 +212,9 @@ export default function Home() {
                                         videoComments={post.comments_count}
                                         ago={post.created_at}
                                         likesCount={post.likes_count}
-                                        isReacted={isReacted}
                                         setReacted={setReacted}
+                                        likes={post.likes}
+                                        me={i.id}
                                     />
                                 )) 
                                 : 

@@ -1,3 +1,4 @@
+
 "use client"
 
 import { useEffect, useState } from 'react'
@@ -8,6 +9,7 @@ import '@fortawesome/fontawesome-free/css/all.min.css'
 import { Requests } from './../../utiles/Requests'
 import Nav from './../../profile/nav/nav'
 import Message from '../message/message'
+
 
 
 function Page( props:any) {
@@ -27,8 +29,8 @@ function Page( props:any) {
         if (!me){
             const Req = new Requests()
             const data = await Req.whoAmI()
-            setMe(data)
             console.log(data)
+            setMe(data)
             return
         }
         
@@ -46,9 +48,10 @@ function Page( props:any) {
         if (selectedUser.id != 0){
             const Req = new Requests()
             await Req.sendMessage(selectedUser.id,prompt)
+            setPrompt('')
             await whoAmI()
             await getMessages(selectedUser.id)
-            setPrompt('')
+            
         }
         else{
             return 
@@ -62,6 +65,12 @@ function Page( props:any) {
         setSelectedUser(data[0])
     }
 
+    async function getInbox(){
+        const Req = new Requests
+        const data = await Req.getInboxAlerts()
+        setMessages(data.messages)
+
+    }
 
     if (!token){
         window.location.href = '/'
@@ -70,10 +79,13 @@ function Page( props:any) {
 
     // eslint-disable-next-line react-hooks/rules-of-hooks
     useEffect(()=>{
-        getSelectedUser()
-        whoAmI()
+        
         if(props.params.id!= 0){
+            getSelectedUser()
+            whoAmI()
             getMessages(props.params.id)
+        }else{
+            getInbox()
         }
     }, [])
 
@@ -93,8 +105,10 @@ function Page( props:any) {
 
 
     return (
-        <div className="container-fluid h-100" data-bs-theme = {mode}>
-            <Nav page='CHAT'/>
+        <div className={`container-fluid mn row ${mode != null ? mode : 'light'}`} data-bs-theme = {mode}>
+            <div className="nav-cont">
+                <Nav page='CHAT'/>
+            </div>
             <div className="row justify-content-center h-100 mt-4 mb-1">
                 <div className="col-md-11 col-xl-12 chat">
                     <div className="card col-12">
@@ -115,7 +129,7 @@ function Page( props:any) {
                             </div>
                             <div className={`action_menu ${showOptions ? 'show' : ''}`} data-bs-theme = {mode}>
                                 <ul>
-                                    <li><i className="fas fa-user-circle"></i> View profile</li>
+                                    <li><a href={'../../profile/?id='+props.params.id}><i className="fas fa-user-circle"></i>View profile</a></li>
                                     <li><i className="fas fa-users"></i> Add to close friends</li>
                                     <li><i className="fas fa-plus"></i> Add to group</li>
                                     <li><i className="fas fa-ban"></i> Block</li>
@@ -146,8 +160,9 @@ function Page( props:any) {
                                 <div className="input-group-append">
                                     <span className="input-group-text attach_btn"><i className="fas fa-paperclip"></i></span>
                                 </div>
-                                <textarea name="" 
+                                <input name="" 
                                     className="form-control type_msg" 
+                                    value={prompt}
                                     placeholder="Type your message..."
                                     onChange={(e)=>{
                                         setPrompt(e.target.value)
@@ -158,9 +173,9 @@ function Page( props:any) {
                                             sendMessage();
                                         }
                                     }}
-                                >
-                                    {!isInbox ? prompt : ""}
-                                </textarea>
+                                />
+                                  
+                               
                                 <div className="input-group-append" onClick={sendMessage}>
                                     <span className="input-group-text send_btn"><i className="fas fa-location-arrow"></i></span>
                                 </div>

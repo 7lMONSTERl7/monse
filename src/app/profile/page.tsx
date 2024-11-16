@@ -55,7 +55,7 @@ function Profile(){
                             </div>
                             <div className="carac mx-5 mt-2 text-dark">
                                 <p className="fs-5 fw-bolder mb-0">{userInfo.username}</p>
-                                <p className="fs-6 mt-0">1 posts</p>
+                                <p className="fs-6 mt-0">{userInfo.posts_count} posts</p>
                             </div>
                         </div>
                     </div>

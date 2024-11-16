@@ -101,14 +101,14 @@ class Requests {
         return data;
     }
 
-    async createComment(comment: any, setComment: any, postID: number) {
+    async createComment(post:boolean,comment: any, setComment: any, postID: number) {
         if (!this.token) {
             alert("You Have to login to add a comment !!!");
             return;
         }
         if (comment) {
-            const res = await fetch(`${this.url}/api/posts/`, {
-                method: 'PUT',
+            const res = await fetch(`${this.url}/api/${post ? 'posts' : 'videos'}/`, {
+                method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Token ${localStorage.getItem('token')}`,
@@ -116,33 +116,8 @@ class Requests {
                 },
                 body: JSON.stringify({
                     "id": `${postID}`,
-                    "body": `${comment}`
-                })
-            });
-            const data = await res.json();
-            alert(data.message);
-            setComment('');
-        } else {
-            alert('Please enter a comment');
-        }
-    }
-
-    async createVideoComment(comment: any, setComment: any, postID: number) {
-        if (!this.token) {
-            alert("You Have to login to add a comment !!!");
-            return;
-        }
-        if (comment) {
-            const res = await fetch(`${this.url}/api/videos/`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Token ${localStorage.getItem('token')}`,
-                    "ngrok-skip-browser-warning": "true"
-                },
-                body: JSON.stringify({
-                    "id": `${postID}`,
-                    "body": `${comment}`
+                    "comment": `${comment}`,
+                    "type":"comment"
                 })
             });
             const data = await res.json();
@@ -186,6 +161,7 @@ class Requests {
             alert('username or password is empty');
             return;
         }
+
         const formData = new FormData();
         formData.append('username', username);
         formData.append('password', password);
@@ -193,18 +169,28 @@ class Requests {
         formData.append('user_img', profile_img);
         formData.append('cover', cover_img);
         formData.append('bio', bio);
-
+        
         const res = await fetch(`${this.url}/api/register/`, {
             method: 'POST',
             body: formData
         });
         const data = await res.json();
-        alert(data.message);
+
+        if (res.status == 201){
+            alert('The account created sucessfuly !!!');
+        }
+        else{
+            alert('Registration Faild !')
+        }
         setShowRegister(false);
     }
 
     async publishPost(postData: any, setCreatePost: any) {
         const { title, body, img } = postData;
+        if (!(title||body||img)){
+            alert('Please fill all the fields !!!')
+            return 
+        }
         const token = localStorage.getItem('token');
         const formData = new FormData();
         formData.append('title', title);
@@ -245,11 +231,11 @@ class Requests {
         setCreateVideo(false);
     }
 
-    async react(postID:any, reacted:any, setLocalReacted:any, setLocalLikesCount:any, localLikesCount:any, setReacted:any) {
-        const newReactedState = !reacted;
+    async postReact(post:boolean,postID:any, reacted:any, setReacted:any, setLikesCount:any, LikesCount:any,) {
+        let newReactedState = !reacted;
         if (this.token) {
-            const res = await fetch(`${this.url}/api/posts/`, {
-                method: 'PUT',
+            const res = await fetch(`${this.url}/api/${post ? 'posts' : 'videos'}/`, {
+                method: 'PATCH',
                 headers: {
                     'Authorization': `Token ${this.token}`,
                     'Content-Type': 'application/json',
@@ -257,25 +243,30 @@ class Requests {
                 },
                 body: JSON.stringify({
                     "id": postID,
-                    "isReacted": newReactedState
+                 
                 })
             });
             
-            const data = await res.json();
-            if (data.message === 'Post already liked') {
-                setLocalReacted(!newReactedState);
+            //const data = await res.json();
+            if (res.status == 204) {
+                newReactedState = false
+                setLikesCount(LikesCount-1)
+                setReacted(newReactedState);
+               
             } else {
-                setLocalReacted(newReactedState);
-                setLocalLikesCount(localLikesCount + (newReactedState ? 1 : -1));
-                setReacted(postID, newReactedState);
+                newReactedState = true
+                setLikesCount(LikesCount+1)
+                setReacted(newReactedState);
+                
             }
+            
         } else {
             alert("You are not authorized");
         }
     }
     
-    async isItReacted(postID:any, setLocalReacted:any) {
-        const res = await fetch(`${this.url}/api/posts/${postID}/reacted`, {
+    async isItReacted(post:boolean,postID:any, setLocalReacted:any) {
+        const res = await fetch(`${this.url}/api/${post ? 'posts' : 'videos'}/`, {
             method: 'GET',
             headers: {
                 'Authorization': `Token ${this.token}`,
@@ -308,7 +299,7 @@ class Requests {
     }
 
     async getInboxAlerts() {
-        const res = await fetch(`${this.url}/api/chat/`, {
+        const res = await fetch(`${this.url}/api/inbox/`, {
             method: "GET",
             headers: {
                 "Authorization": `Token ${this.token}`,

@@ -12,10 +12,7 @@ interface MessageTypes{
 
 function Message({ url,date,sender,message,side,Me,mode }:MessageTypes){
     return (
-        <div className={`d-flex justify-content-${side == 'right' ? 'start' : "end"} flex-row${side == 'left' ? '-reverse' : ''} mb-4`}>
-            <div className="flex-shrink-1 bg-light rounded py-2 px-3 mr-3">
-                <div className="font-weight-bold mb-1">{(sender && Me && sender.id == Me.id) ? "You" : sender.username}</div>
-            </div>
+        <div className={`d-flex justify-content-${side == 'right' ? 'start' : ""} flex-row${side == 'left' ? '-reverse' : ''} mb-4`}>
             <div className="img_cont_msg">
                 <Image
                     src={`${url}${sender.profile_picture}`}
@@ -25,8 +22,11 @@ function Message({ url,date,sender,message,side,Me,mode }:MessageTypes){
                     height={300}
                 />
             </div>
-            <div className={`msg_cotainer_send bg-${mode}`}>
-                {message}
+            <div className="flex-shrink-1  rounded py-2 px-3 mr-3">
+                <div className="font-weight-bold mb-1">{(sender && Me && sender.id == Me.id) ? "You" : sender.username}</div>
+            </div>
+            <div className={`msg_cotainer send bg-${mode=="light" ? "dark" : 'light'}`}>
+                <span>{message}</span>
                 <span className="msg_time">{date}</span>
             </div>
         </div>

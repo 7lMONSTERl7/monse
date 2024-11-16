@@ -1,14 +1,35 @@
-	body,html{
-			height: 100vh;
-			margin: 0;
-		}
+body,html{
+	height: 100vh;
+	margin: 0;
+}
+
+.nav-cont{
+	height: 4em;
+}
+
+.msg_cotainer.bg-light span{
+	color: #000 !important;
+}
+
+.msg_cotainer.bg-light .msg_time{
+	color: #fff !important;
+}
+
+.msg_cotainer.bg-dark span{
+	color: #fff !important;
+}
+
+.msg_cotainer.bg-dark .msg_time{
+	color: #000 !important;
+}
+
 		.chat{
 			display: flex;
 			justify-content: center;
 		}
 		.card{
 			min-height: 50vh;
-			max-height: 80vh;
+		max-height: 80vh;
 			overflow-y: scroll;
 		}
 		.contacts_body{
@@ -26,6 +47,14 @@
 		.card-footer{
 			border-radius: 0 0 15px 15px !important;
 			border-top: 0 !important;
+		}
+		.mn{
+			width: 100vw;
+			height: 100vh;
+		}
+		.mn.dark{
+			background-color: #000;
+			color: #fff;
 		}
 		.container{
 			align-content: center;
@@ -55,7 +84,7 @@
 			background-color: rgba(0,0,0,0.3) !important;
 			border:0 !important;
 			color:white !important;
-			height: 30px !important;
+			height: 2.37em !important;
 			overflow-y: auto;
 		}
 		.type_msg:focus{
@@ -153,8 +182,8 @@
 			position: absolute;
 			left: 0;
 			bottom: -15px;
-			color: rgba(255,255,255,0.5);
 			font-size: 10px;
+			min-width: 100px;
 		}
 		.msg_time_send{
 			position: absolute;
@@ -184,6 +213,10 @@
 			top: 30px;
 			right: 15px;
 			display: none;
+		}
+		.action_menu a{
+			color: #fff;
+			text-decoration: none;
 		}
 		.action_menu ul{
 			list-style: none;

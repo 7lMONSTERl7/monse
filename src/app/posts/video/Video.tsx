@@ -30,23 +30,14 @@ function Video({ postID, authorId, user, title, userImg, video, videoContent, vi
 
     async function createComment(){
         const Req = new Requests()
-        await Req.createVideoComment(comment,setComment,postID)
+        await Req.createComment(false,comment,setComment,postID)
         await Req.getSingleVideo(`${postID}`,setPostData)
-        setComment('')
+
     }
 
-    async function react() {
-        const Req = new Requests()
-        await Req.react(postID, reacted, setLocalReacted, setLocalLikesCount,localLikesCount,setReacted);
-    }
-
-    async function isItReacted(){
-        const Req = new Requests()
-        await Req.isItReacted(postID,setLocalReacted,setReacted)
-    }
 
     return (
-        <div className="card shadow col-10 my-4" onLoad={()=>{isItReacted()}}>
+        <div className="card shadow col-10 my-4" >
             <div className="card-header d-flex">
                 <img
                     className="img-thumbnail border border-2 rounded-circle"

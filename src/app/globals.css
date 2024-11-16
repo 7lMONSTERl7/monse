@@ -115,3 +115,33 @@ main.dark {
     display: none;
   }
 }/*# sourceMappingURL=globals.css.map */
+
+.lighter{
+  font-weight: 400;
+  font-size: 0.8em;
+}
+
+.alerts-container{
+  position: fixed;
+  bottom: 1em;
+  right: 1em;
+  width: 30%;
+}
+
+.log{
+  position: relative;
+  width: 95%;
+}
+
+.log button{
+  position: absolute;
+  right: 1em;
+  top: 20%;
+  background: none;
+  border: transparent;
+  
+}
+
+.log button span{
+  font-size: 1.5em;
+}

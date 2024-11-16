@@ -63,7 +63,7 @@ function Nav({ page, Me, authStatus, setShowModal, setShowRegister, setAuthStatu
                                 <>
                                     <Image
                                         className="img-thumbnail border border-2 rounded-circle shadow"
-                                        src={`${localStorage.getItem('baseUrl')}${Me.profile_picture || "/media/base.png"}`}
+                                        src={`http://127.0.0.1:8000${Me.profile_picture || "/media/base.png"}`}
                                         alt="Profile"
                                         width={50}
                                         height={50}

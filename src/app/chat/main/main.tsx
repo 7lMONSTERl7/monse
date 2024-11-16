@@ -5,10 +5,12 @@ import { Requests } from './../../utiles/Requests'
 import { useEffect, useState } from 'react'
 import Toast from '../toast/toast'
 
+
+
 function Main(){
     const token = localStorage.getItem('token')
     const [Users,setUsers] = useState<any[]>([{'id':0}])
-    const [searchQuery,setSearchQuery] = useState<string>()
+    const [searchQuery,setSearchQuery] = useState<string>("")
     const [inbox , setInbox] = useState<any[]>([])
     const [isInbox, setIsInbox] = useState<boolean>(true)
     
@@ -20,8 +22,9 @@ function Main(){
 
     async function getUsers(){
         const Req = new Requests()
-        const data = await Req.getUsers()
-        await setUsers(data.users)
+        const userData = await Req.getUsers()
+        console.log(userData)
+        await setUsers(userData)
     }
     
 
@@ -33,14 +36,16 @@ function Main(){
 
 
     async function search(){
-        const Req = new Requests()
-        const data = await Req.search(searchQuery)
-        setUsers(data.users)
+        if (searchQuery.length > 0){
+            const Req = new Requests()
+            const data = await Req.search(searchQuery,)
+            setUsers(data.users)
+        }
     }
 
     useEffect(()=>{
-        getUsers()
         getInboxAlerts()
+        getUsers()
     },[])
 
     
@@ -78,7 +83,7 @@ function Main(){
                                 setInbox={setIsInbox}
                             />
                         </li>
-                        {   Users ?
+                        {   Users?.length > 1 ?
                                 Users.map((e , index)=>{
                                     return <li key={index}> <User 
                                             user={e}

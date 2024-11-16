@@ -9,6 +9,8 @@ function RegisterModal({ registerData,setRegisterData,setShowRegister,showRegist
 
     async function register() {
         const Req = new Requests()
+        registerData.profile_img == undefined ? registerData.profile_img = 'media/profile_picture/base.png' : registerData.profile_img
+        registerData.cover_img == undefined ? registerData.cover_img = 'media/profile_picture/cover.png' : registerData.cover_img
         Req.register(registerData,setShowRegister())
     }
 

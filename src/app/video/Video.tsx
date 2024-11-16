@@ -15,26 +15,38 @@ interface VideoProps {
     videoComments: string;
     ago: string;
     likesCount: number;
-    isReacted: boolean;
     setReacted: any,
+    likes:any,
+    me:any,
 }
 
-function Video({ postID, authorId, user, title, userImg, video, videoContent, videoComments, ago, likesCount, isReacted, setReacted }: VideoProps) {
-    const [reacted, setLocalReacted] = useState(isReacted);
-    const [localLikesCount, setLocalLikesCount] = useState(likesCount);
-
-    async function react() {
-        const Req = new Requests()
-        await Req.react(postID, reacted, setLocalReacted, setLocalLikesCount,localLikesCount,setReacted);
+function Video({ me,postID, authorId, user, title, userImg, video, videoContent, videoComments, ago, likesCount,likes }: VideoProps) {
+    const [reacted, setReacted] = useState<boolean>(false);
+    const [LikesCount, setLikesCount] = useState<number>(likesCount);
+    const [reacts,setReacts] = useState<number[]>([])
+    function allLikes(){
+        if (likes) {
+            const reactIds = likes.map((like: any) => like.author.id);
+            setReacts(reactIds);
+            if (reactIds.includes(me)) {
+                setReacted(true);
+                return;
+            }  
+            setReacted(false);
+        }
     }
 
-    async function isItReacted(){
+    async function makeReact() {
         const Req = new Requests()
-        await Req.isItReacted(postID,setLocalReacted,setReacted)
+        await Req.postReact(false,postID, reacted, setReacted, setLikesCount,LikesCount);
     }
+
+    useEffect(()=>{
+        allLikes()
+    },[])
 
     return (
-        <div className="card shadow col-10 my-4" onLoad={()=>{isItReacted()}}>
+        <div className="card shadow col-10 my-4">
             <div className="card-header d-flex">
                 <img
                     className="img-thumbnail border border-2 rounded-circle"
@@ -67,14 +79,15 @@ function Video({ postID, authorId, user, title, userImg, video, videoContent, vi
                         {`(${videoComments}) comments`}
                     </span>
                     <span id="react">
+                    {likesCount > 1 ? <span className='lighter'>liked by <strong>{likes[0].author.username}</strong> and <strong>{likesCount != 0 ? likesCount-1 : ""}</strong> others</span> : ""}
                         <i
                             className={`${reacted ? 'fas' : 'far'} fa-thumbs-up mx-2`}
                             id="like"
-                            onClick={react}
+                            onClick={makeReact}
                         >
                         </i>
                         <em className="count">
-                            {localLikesCount}
+                            {LikesCount}
                         </em>
                     </span>
                 </div>

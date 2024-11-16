@@ -20,7 +20,7 @@ function Post({authorId,postID,user,title,userImg,postImg,postContent,commentsCo
     const [comment,setComment] = useState<any>()
     async function createComment(){
         const Req = new Requests()
-        await Req.createComment(comment,setComment,postID)
+        await Req.createComment(true,comment,setComment,postID)
         await Req.getSinglePost(`${postID}`,setPostData)
         setComment('')
     }

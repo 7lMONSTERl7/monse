@@ -18,17 +18,34 @@ interface PostProps {
     ago: string;
     likesCount: number;
     isReacted: boolean;
+    likes: any;
+    me: any,
 }
 
-function Post({ postID, authorId, user, title, userImg, postImg, postContent, postComments, ago, likesCount, isReacted }: PostProps) {
-    const [reacted, setLocalReacted] = useState<boolean>(isReacted);
-    const [localLikesCount, setLocalLikesCount] = useState(likesCount);
+function Post({ me,postID, authorId, user, title, userImg, postImg, postContent, postComments, ago, likes,likesCount, isReacted }: PostProps) {
+    const [reacted, setReacted] = useState<boolean>(false);
+    const [LikesCount, setLikesCount] = useState<number>(likesCount);
+    const [reacts,setReacts] = useState<number[]>([])
+    function allLikes(){
+        if (likes) {
+            const reactIds = likes.map((like: any) => like.author.id);
+            setReacts(reactIds);
+            if (reactIds.includes(me)) {
+                setReacted(true);
+                return;
+            }  
+            setReacted(false);
+        }
+    }
 
-    async function react() {
+    async function makeReact() {
         const Req = new Requests()
-        await Req.react(postID, reacted, setLocalReacted, setLocalLikesCount,localLikesCount,setLocalReacted);
+        await Req.postReact(true,postID, reacted, setReacted, setLikesCount,LikesCount);
     }
    
+    useEffect(()=>{
+        allLikes()
+    }, [])
 
     return (
         <div className="card shadow col-12 my-4" key={postID}>
@@ -50,7 +67,7 @@ function Post({ postID, authorId, user, title, userImg, postImg, postContent, po
             <div className="card-body w-100">
                 <div className="img">
                     {   
-                        postImg && postImg != undefined ? 
+                        (postImg && postImg != undefined) ? 
                         
                             <Image
                                 className="img-fluid"
@@ -58,6 +75,8 @@ function Post({ postID, authorId, user, title, userImg, postImg, postContent, po
                                 alt="Post image"
                                 width={1000}
                                 height={800}
+                                onClick={() => { window.location.href = `/posts/?id=${postID}` }}
+
                             />
                         :
                             null
@@ -74,14 +93,17 @@ function Post({ postID, authorId, user, title, userImg, postImg, postContent, po
                             {`(${postComments}) comments`}
                         </span>
                         <span id="react">
+
+                            {likesCount > 1 ? <span className='lighter'>liked by <strong>{likes[0].author.username}</strong> and <strong>{likesCount != 0 ? likesCount-1 : ""}</strong> others</span> : ""}
+
                             <i
                                 className={`${reacted ? 'fas' : 'far'} fa-thumbs-up mx-2`}
                                 id="like"
-                                onClick={react}
+                                onClick={makeReact}
                             >
                             </i>
                             <em className="count">
-                                {localLikesCount}
+                                {LikesCount}
                             </em>
                         </span>
                     </div>

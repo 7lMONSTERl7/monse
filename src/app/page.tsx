@@ -14,7 +14,9 @@ import InfiniteScroll from 'react-infinite-scroller';
 import RegisterModal from './modal/register';
 import { Requests } from './utiles/Requests';
 import Image from 'next/image'
+
 import { useEffect, useState } from 'react';
+import Log from './log/log';
 
 interface Post {
     key: number,
@@ -30,6 +32,8 @@ interface Post {
     isReacted: boolean,
     setReacted: any,
     liked: boolean,
+    likes: any,
+    me: any,
 }
 
 interface userData {
@@ -47,7 +51,7 @@ interface registerData {
 }
 
 export default function Home() {
-    const baseUrl = 'http://192.168.8.183:8000';
+    const baseUrl = 'http://127.0.0.1:8000';
     const baseMode = localStorage.getItem('mode');
     const token = localStorage.getItem('token');
     const [mode, setMode] = useState<string | null>();
@@ -64,7 +68,7 @@ export default function Home() {
     const [url, setUrl] = useState<string>(baseUrl + '/api/posts/');
     const [i, setMe ] = useState<any >({})
     const [hasMore, setHasMore] = useState<boolean>(true);
-  
+    const [logs,setLog] = useState<String[]>(["hello world"])
 
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -75,13 +79,14 @@ export default function Home() {
         setHasMore(true);
         setUrl(data.next);
     } 
-    
+   
     async function whoAmI() {
         const Req = new Requests();
         const data = await Req.whoAmI();
         if (data && token) {
             setMe(data)
-        }
+            localStorage.setItem("me",JSON.stringify(data))
+        } 
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -215,6 +220,8 @@ export default function Home() {
                                     ago={post.created_at}
                                     likesCount={post.likes_count}
                                     isReacted={post.liked}
+                                    likes={post.likes}
+                                    me={i.id}
                                 />
                             )) : 
                                 <div className="card card-ph h-75 card shadow col-12 mb-5 mt-4" aria-hidden="true">
@@ -251,6 +258,13 @@ export default function Home() {
                     </div>
                 </div>
             </div>
+            <div className="alerts-container"></div>
+            {logs? 
+                    logs.map((e:any)=>{
+                        return  <Log log={e}/>
+                    })
+                    : ''
+                }
         </main>
     );
 }
