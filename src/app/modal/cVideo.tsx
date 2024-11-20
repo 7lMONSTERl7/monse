@@ -10,13 +10,14 @@ interface Video{
     setVideoData:Dispatch<SetStateAction<any>>,
     setCreateVideo:Dispatch<SetStateAction<boolean>>,
     setVideos:Dispatch<SetStateAction<any>>,
+    log:Dispatch<SetStateAction<String[]>>,
     url:string,
 }
 
-function VideoModal({ url,createVideo,videoData,setVideoData,setCreateVideo,setVideos }:Video){
+function VideoModal({ url,createVideo,videoData,setVideoData,setCreateVideo,setVideos ,log}:Video){
     async function publishVideo(){
         const Req = new Requests
-        await Req.publishVideo(videoData,setCreateVideo)
+        await Req.publishVideo(videoData,setCreateVideo,log)
         const data = await Req.getPosts(url)
         await setVideos(data)
     }

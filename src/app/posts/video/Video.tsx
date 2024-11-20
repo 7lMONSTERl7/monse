@@ -20,17 +20,19 @@ interface VideoProps {
     isReacted: boolean;
     setReacted: any,
     setPostData: any,
+    log:any,
+    logs:string[],
 
 }
 
-function Video({ postID, authorId, user, title, userImg, video, videoContent, videoComments, videoCommentsCount, ago, likesCount, setPostData, isReacted, setReacted }: VideoProps) {
+function Video({ postID, authorId, user, title, userImg, video, videoContent, videoComments, videoCommentsCount, ago, likesCount, setPostData, isReacted, setReacted,logs,log }: VideoProps) {
     const [reacted, setLocalReacted] = useState(isReacted);
     const [localLikesCount, setLocalLikesCount] = useState(likesCount);
     const [comment,setComment] = useState<any>()
 
     async function createComment(){
         const Req = new Requests()
-        await Req.createComment(false,comment,setComment,postID)
+        await Req.createComment(false,comment,setComment,postID,logs,log)
         await Req.getSingleVideo(`${postID}`,setPostData)
 
     }

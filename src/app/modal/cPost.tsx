@@ -9,19 +9,23 @@ interface Post{
     postData: any,
     setPostData:Dispatch<SetStateAction<any>>,
     setCreatePost:Dispatch<SetStateAction<boolean>>,
-    setPosts:Dispatch<SetStateAction<any>>,
+    setPosts:any,
     url:string,
+    logs:String[],
+    log:Dispatch<SetStateAction<String[]>>
 }
 
-function PostModal({ url,createPost,postData,setPostData,setCreatePost,setPosts }:Post){
+function PostModal({ url,createPost,postData,setPostData,setCreatePost,setPosts,logs,log }:Post){
     async function publishPost(){
         const Req = new Requests
         try{
-            await Req.publishPost(postData,setCreatePost)
-            const data = await Req.getPosts(url)
-            await setPosts(data)
+            await Req.publishPost(postData,setCreatePost,logs,log)
+            const data = await Req.getPosts(url+"/api/posts/")
+            log([...logs,"Post Published Successfuly !!!"])
+            setPosts();
+            
         }catch{
-            return
+            log([...logs,'Post not published !!!'])
         }
         
 

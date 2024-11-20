@@ -4,14 +4,14 @@ import React from 'react';
 import { Modal, Button } from 'react-bootstrap';
 import { Requests } from '../utiles/Requests'
 
-function RegisterModal({ registerData,setRegisterData,setShowRegister,showRegister }) {
+function RegisterModal({ registerData,setRegisterData,setShowRegister,showRegister,logs,log }) {
     
 
     async function register() {
         const Req = new Requests()
         registerData.profile_img == undefined ? registerData.profile_img = 'media/profile_picture/base.png' : registerData.profile_img
         registerData.cover_img == undefined ? registerData.cover_img = 'media/profile_picture/cover.png' : registerData.cover_img
-        Req.register(registerData,setShowRegister())
+        Req.register(registerData,setShowRegister(),logs,log)
     }
 
     return (

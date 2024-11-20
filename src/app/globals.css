@@ -125,7 +125,7 @@ main.dark {
   position: fixed;
   bottom: 1em;
   right: 1em;
-  width: 30%;
+  width: 30vw;
 }
 
 .log{
@@ -139,9 +139,16 @@ main.dark {
   top: 20%;
   background: none;
   border: transparent;
-  
 }
 
 .log button span{
   font-size: 1.5em;
+}
+
+.obs{
+  width: 100vw;
+  height: 40vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

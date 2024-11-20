@@ -7,6 +7,7 @@ import 'bootstrap/js/dist/collapse.js'
 import Nav from '../profile/nav/nav'
 import Post from './post/post'
 import Video from './video/Video'
+import Log from '../log/log'
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { Requests } from './../utiles/Requests'
@@ -14,6 +15,7 @@ import { Requests } from './../utiles/Requests'
 function Posts(){
     const url = localStorage.getItem('baseUrl')
     const searchParams = useSearchParams();
+    const [logs,setLog] = useState<any[]>([])
     const [isPost, setIsPost] = useState<boolean>(true)
     const [postData,setPostData] = useState<any>({
         id : 1,
@@ -85,9 +87,21 @@ function Posts(){
                                     isReacted={postData.isReacted}
                                     setReacted={()=>{}}
                                     setPostData={setPostData}
+                                    logs={logs}
+                                    log={setLog}
                                 />
                     : 
                         <div className='alert col-11 alert-danger d-flex justify-content-center align-items-center '>There is no post</div>
+                }
+            {(logs.length > 0 && logs!= undefined) ? 
+                    logs.map((e:any)=>{
+                           setTimeout(() => {
+                            setLog(logs.shift())
+                        }, 7000);
+                        return  <Log log={e}/>
+                    })
+                : 
+                ""
                 }
             </div>
             

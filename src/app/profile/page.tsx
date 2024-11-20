@@ -76,13 +76,10 @@ function Profile(){
                                     <div><i className="fa-solid fa-calendar-days"></i><span className="fw-normal fs-5 mx-3">{userInfo.date_joined}</span></div>
                                     <div className="fs-5 d-flex mb-5">
                                         <div className="info mx-2">
-                                            <span className="fw-bold">2</span>
-                                            <span className="fw-normal">| Following</span>
+                                            <span className="fw-bold">0</span>
+                                            <span className="fw-normal">| Friends</span>
                                         </div>
-                                        <div className="info mx-2">
-                                            <span className="fw-bold ml-3">3</span> 
-                                            <span className="fw-normal ">| Followers</span>
-                                        </div>
+                                        
                                     </div>
                                 </div>
                             </div>

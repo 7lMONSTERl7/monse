@@ -17,6 +17,10 @@
   margin-bottom: 10em;
 }
 
+.css img{
+  width: 30vw;
+}
+
 .details {
   display: flex;
   justify-content: space-between;

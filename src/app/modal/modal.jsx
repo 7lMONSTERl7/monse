@@ -4,28 +4,20 @@ import React, { useState } from 'react';
 import { Modal, Button } from 'react-bootstrap';
 import { Requests } from '../utiles/Requests';
 
-function CustomModal({ userData, whoAmI, setME ,setData, setAuthStatus, showModal, setShowModal }) {
+function CustomModal({ userData, whoAmI, setME ,setData, setAuthStatus, showModal, setShowModal,logs,log }) {
     async function login() {
         const Req = new Requests();
         try {
-            // Attempt to log in the user
-            await Req.login(userData, whoAmI, setAuthStatus, setShowModal);
-
-            // Update auth status immediately
+            await Req.login(userData, whoAmI, setAuthStatus, setShowModal,log);
             setAuthStatus(true);
-
-            // Store user data  immediately after successful login
             const data = whoAmI()
             if (data){
                 setME(data)
+                log([...logs,'LOGIN Successful',`Welcome ${userData.username}`])
             }
-            
-
-            // Close the modal upon successful login
             setShowModal(false);
         } catch (error) {
-            console.error("Login failed:", error);
-            // You can add error handling or display a message to the user here
+            log([...logs,"Login failed ","Username or Password is Wrong !!!"]);
         }
     }
 

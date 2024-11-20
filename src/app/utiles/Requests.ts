@@ -101,9 +101,9 @@ class Requests {
         return data;
     }
 
-    async createComment(post:boolean,comment: any, setComment: any, postID: number) {
+    async createComment(post:boolean,comment: any, setComment: any, postID: number,logs:string[],log:any) {
         if (!this.token) {
-            alert("You Have to login to add a comment !!!");
+            log("You Have to login to add a comment !!!");
             return;
         }
         if (comment) {
@@ -121,14 +121,15 @@ class Requests {
                 })
             });
             const data = await res.json();
-            alert(data.message);
+            if (logs){log([...logs,data.message])}else{log(data.message)}
+            ;
             setComment('');
         } else {
-            alert('Please enter a comment');
+            log('Please enter a comment');
         }
     }
 
-    async login(userData: any,whoAmI: any ,setAuthStatus: any, setShowModal: any) {
+    async login(userData: any,whoAmI: any ,setAuthStatus: any, setShowModal: any,logs:String[],log:any) {
         const res = await fetch(`${this.url}/api/login/`, {
             method: 'POST',
             headers: {
@@ -144,21 +145,26 @@ class Requests {
         if (res.ok) {
             const data = await res.json();
             const token = data.token;
-            localStorage.setItem('token', token);
-            whoAmI()
-            setAuthStatus(true);
-            setShowModal(false);
+            if (token){
+                localStorage.setItem('token', token);
+                whoAmI()
+                setAuthStatus(true);
+                setShowModal(false);
+            }
+            else{
+                log([...logs,'LOGIN ERROR !!!',"Username or Password are not correct !!!"]);
+            }
             //window.location.reload();
             
         } else {
-            alert('LOGIN ERROR !!!');
+            log([...logs,'LOGIN ERROR !!!',"Username or Password are not correct !!!"]);
         }
     }
 
-    async register(registerData: any, setShowRegister: any) {
+    async register(registerData: any, setShowRegister: any,logs:String[],log:any) {
         const { username, password, email, profile_img, cover_img, bio } = registerData;
         if (!username || !password) {
-            alert('username or password is empty');
+            log('username or password is empty');
             return;
         }
 
@@ -177,15 +183,15 @@ class Requests {
         const data = await res.json();
 
         if (res.status == 201){
-            alert('The account created sucessfuly !!!');
+            log([...logs,'The account created sucessfuly !!!']);
         }
         else{
-            alert('Registration Faild !')
+            log([...logs,'Registration Faild !'])
         }
         setShowRegister(false);
     }
 
-    async publishPost(postData: any, setCreatePost: any) {
+    async publishPost(postData: any, setCreatePost: any,logs:any[],log:any) {
         const { title, body, img } = postData;
         if (!(title||body||img)){
             alert('Please fill all the fields !!!')
@@ -206,11 +212,11 @@ class Requests {
             body: formData
         });
         const data = await res.json();
-        alert(data.message);
+        log([...logs,data.message]);
         setCreatePost(false);
     }
 
-    async publishVideo(videoData: any, setCreateVideo: any) {
+    async publishVideo(videoData: any, setCreateVideo: any,log:any) {
         const { title, body, video } = videoData;
         const token = localStorage.getItem('token');
         const formData = new FormData();
@@ -227,11 +233,11 @@ class Requests {
             body: formData
         });
         const data = await res.json();
-        alert(data.message);
+        log(data.message);
         setCreateVideo(false);
     }
 
-    async postReact(post:boolean,postID:any, reacted:any, setReacted:any, setLikesCount:any, LikesCount:any,) {
+    async postReact(post:boolean,postID:any, reacted:any, setReacted:any, setLikesCount:any, LikesCount:any,log:any) {
         let newReactedState = !reacted;
         if (this.token) {
             const res = await fetch(`${this.url}/api/${post ? 'posts' : 'videos'}/`, {
@@ -310,9 +316,9 @@ class Requests {
         return data;
     }
 
-    async sendMessage(receiver: number | undefined, message: string | undefined) {
+    async sendMessage(receiver: number | undefined, message: string | undefined,log:any) {
         if (!receiver || !message) {
-            alert('Please enter a message');
+            log('Please enter a message');
             return;
         }
         const res = await fetch(`${this.url}/api/chat/conversation/`, {

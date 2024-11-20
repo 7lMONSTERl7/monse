@@ -10,13 +10,13 @@ import Nav from './navbar/nav';
 import Post from './post/post';
 import PostModal from './modal/cPost';
 import VideoModal from './modal/cVideo';
-import InfiniteScroll from 'react-infinite-scroller';
 import RegisterModal from './modal/register';
 import { Requests } from './utiles/Requests';
 import Image from 'next/image'
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Log from './log/log';
+import { isArray } from 'util';
 
 interface Post {
     key: number,
@@ -51,7 +51,7 @@ interface registerData {
 }
 
 export default function Home() {
-    const baseUrl = 'http://127.0.0.1:8000';
+    const baseUrl = 'http://192.168.1.103:8000';
     const baseMode = localStorage.getItem('mode');
     const token = localStorage.getItem('token');
     const [mode, setMode] = useState<string | null>();
@@ -68,16 +68,22 @@ export default function Home() {
     const [url, setUrl] = useState<string>(baseUrl + '/api/posts/');
     const [i, setMe ] = useState<any >({})
     const [hasMore, setHasMore] = useState<boolean>(true);
-    const [logs,setLog] = useState<String[]>(["hello world"])
-
+    const [logs,setLog] = useState<any[]>([])
+    const loaderRef = useRef()
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
     async function getPosts() {
-        const Req = new Requests();
-        const data = await Req.getPosts(url);
-        setPosts(data.results);
-        setHasMore(true);
-        setUrl(data.next);
+        if (url != null){
+            const Req = new Requests();
+            const data = await Req.getPosts(url);
+            setPosts(data.results);
+            if (data.next == 'null') {
+                setHasMore(false);
+                return
+            }
+            setHasMore(true);
+            setUrl(data.next);
+        }
     } 
    
     async function whoAmI() {
@@ -89,17 +95,9 @@ export default function Home() {
         } 
     }
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
 
-    async function loadMorePosts() {
-        const Req = new Requests();
-        const morePosts = await Req.getPosts(url);
-        if (!morePosts.next) {
-            setHasMore(false);
-        }
-        setPosts(prevPosts => [...prevPosts, ...morePosts.results]);
-        setUrl(morePosts.next);
-    }
+    
+
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
     function apiRec() {
@@ -133,8 +131,39 @@ export default function Home() {
     }, []);
 
     useEffect(() => {
+        if (isArray(logs) && logs != undefined) {
+          const timer = setTimeout(() => {
+            setLog((logs) => logs.slice(1));
+          }, 4000);
+    
+          return () => clearTimeout(timer); 
+        }
+      }, [logs]);
+
+    useEffect(() => {
         localStorage.setItem('mode', mode || "light");
     }, [mode]);
+
+
+    useEffect(()=>{
+        const observer = new IntersectionObserver((entries)=>{
+            const entry = entries[0]
+            if (entry.isIntersecting && hasMore){
+                getPosts()
+            }
+            
+        })
+
+        if (loaderRef.current){
+            observer.observe(loaderRef.current)
+        }
+
+        return ()=>{
+            if (loaderRef.current){
+                observer.unobserve(loaderRef.current)
+            }
+        }
+    },[hasMore,url])
 
     return (
         <main className={mode || "light"} data-bs-theme={mode}>
@@ -146,12 +175,16 @@ export default function Home() {
                 showModal={showModal}
                 setShowModal={setShowModal}
                 setME={setMe}
+                logs={logs}
+                log={setLog}
             />
             <RegisterModal
                 registerData={registerData}
                 setRegisterData={setRegisterData}
                 setShowRegister={setShowRegister}
                 showRegister={showRegister}
+                logs={logs}
+                log={setLog}
             />
             <button 
                 id='addones'
@@ -171,8 +204,10 @@ export default function Home() {
                 setCreatePost={setCreatePost}
                 postData={postData}
                 setPostData={setPostData}
-                setPosts={setPosts}
+                setPosts={getPosts}
                 url={baseUrl}
+                logs={logs}
+                log={setLog}
             />
             <VideoModal 
                 createVideo={createVideo}
@@ -181,12 +216,14 @@ export default function Home() {
                 setVideoData={setVideoData}
                 setVideos={setPosts} 
                 url={baseUrl}
+                log={setLog}
             />
             <div className="container">
                 <div className="d-flex flex-column align-items-center">
                     <div className="nav-cont col-11 position-fixed">
                         <Nav 
                             authStatus={authStatus}
+                            url={baseUrl}
                             setAuthStatus={setAuthStatus}
                             setShowModal={setShowModal}
                             setShowRegister={setShowRegister}
@@ -194,18 +231,13 @@ export default function Home() {
                             mode={mode}
                             setMode={setMode}
                             page=''
+                            logs={logs}
+                            log={setLog}
                         />
                     </div>
                     <div className="posts d-flex flex-column align-items-center mt-5 pt-5">
-                        <InfiniteScroll
-                            className='col-12 d-flex flex-column align-items-center'
-                            id='infs'
-                            pageStart={0}
-                            initialLoad={false}
-                            loadMore={loadMorePosts}
-                            hasMore={hasMore}
-                            loader={<div className="spinner-border" role="status"><span className="visually-hidden">Loading...</span></div>}
-                        >
+                        <div>
+
                             {posts != undefined && posts.length > 0 ? posts.map((post, index) => (
                                 <Post
                                     key={index}
@@ -254,17 +286,20 @@ export default function Home() {
                                     </div>
                                 </div>
                             }
-                        </InfiniteScroll>
+                        </div>
+                        <div ref={loaderRef} className='obs'><div className="spinner-border"></div></div>
                     </div>
                 </div>
             </div>
-            <div className="alerts-container"></div>
-            {logs? 
+            <div className="alerts-container">
+                {(isArray(logs) && logs != undefined) ? 
                     logs.map((e:any)=>{
                         return  <Log log={e}/>
                     })
-                    : ''
+                : 
+                   ""
                 }
+            </div>
         </main>
     );
 }

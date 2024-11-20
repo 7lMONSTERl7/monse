@@ -6,6 +6,7 @@ import "./../toggler/style.css";
 
 interface NavParams {
     authStatus: boolean,
+    url:string,
     setShowModal: Dispatch<SetStateAction<boolean>>,
     setShowRegister: Dispatch<SetStateAction<boolean>>,
     setAuthStatus: Dispatch<SetStateAction<boolean>>,
@@ -13,6 +14,8 @@ interface NavParams {
     page: string,
     setMode: Dispatch<SetStateAction<string | null | undefined>>
     Me: any | undefined,
+    log:any,
+    logs:String[],
 }
 
 interface userDataParams {
@@ -21,7 +24,7 @@ interface userDataParams {
     profile_picture: any,
 }
 
-function Nav({ page, Me, authStatus, setShowModal, setShowRegister, setAuthStatus, mode, setMode }: NavParams) {
+function Nav({ page, url,Me, authStatus, setShowModal, setShowRegister, setAuthStatus, mode, setMode,logs,log }: NavParams) {
     const [localMode, setLocalMode] = useState<boolean>(false);
     const [userData, setUserData] = useState<userDataParams | undefined>();
 
@@ -63,7 +66,7 @@ function Nav({ page, Me, authStatus, setShowModal, setShowRegister, setAuthStatu
                                 <>
                                     <Image
                                         className="img-thumbnail border border-2 rounded-circle shadow"
-                                        src={`http://127.0.0.1:8000${Me.profile_picture || "/media/base.png"}`}
+                                        src={`${url}${Me.profile_picture || "/media/base.png"}`}
                                         alt="Profile"
                                         width={50}
                                         height={50}
@@ -133,7 +136,7 @@ function Nav({ page, Me, authStatus, setShowModal, setShowRegister, setAuthStatu
                                             localStorage.removeItem('token');
                                             localStorage.removeItem('me');
                                             setAuthStatus(false);
-                                            window.location.reload();
+                                            log([...logs,'Logged out !!!'])
                                         }}
                                     >
                                         <i className="fas fa-door-open"></i> Logout
