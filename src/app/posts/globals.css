@@ -31,3 +31,23 @@ body .container .card-body #comments .card .card-header .comment-img {
   overflow: hidden !important;
   cursor: pointer;
 }/*# sourceMappingURL=globals.css.map */
+
+.alerts-container{
+  position: fixed;
+  bottom: 1em;
+  right: 1em;
+  width: 30vw;
+}
+
+.log{
+  position: relative;
+  width: 95%;
+}
+
+.log button{
+  position: absolute;
+  right: 1em;
+  top: 20%;
+  background: none;
+  border: transparent;
+}

@@ -58,6 +58,12 @@ function Page( props:any) {
         }
     }
 
+    async function deleteConversation(){
+        const Req = new Requests()
+        await Req.deleteConversation(selectedUser.id)
+        getMessages(selectedUser.id)
+    }
+
     async function getSelectedUser(){
         const Req = new Requests()
         const convId = props.params.id
@@ -103,19 +109,18 @@ function Page( props:any) {
         }
     }, [selectedUser])
 
-
     return (
-        <div className={`container-fluid mn row ${mode != null ? mode : 'light'}`} data-bs-theme = {mode}>
+        <div className={`container-fluid mn row w-100 ${mode != null ? mode : 'light'}`} data-bs-theme = {mode}>
             <div className="nav-cont">
                 <Nav page='CHAT'/>
             </div>
-            <div className="row justify-content-center h-100 mt-4 mb-1">
+            <div className="row justify-content-center h-100 mt-4 mb-1 w-100">
                 <div className="col-md-11 col-xl-12 chat">
                     <div className="card col-12">
                         <div className="card-header msg_head">
                             <div className="d-flex bd-highlight align-items-center">
                                 <div className="img-thumbnail rounded-circle img_cont">
-                                    <Image src={`${baseUrl}${selectedUser.profile_picture}`} width={400} height={400} className="rounded-circle user_img" alt='0'/>
+                                <Image src={`${baseUrl}${selectedUser.profile_picture}`} width={400} height={400} className="rounded-circle user_img" alt='0'/>
                                 </div>
                                 <div className="user_info">
                                     <span className={mode != undefined ? `text-${mode == "light" ? 'dark': "light"}` : "text-light"}>{selectedUser.username}</span>
@@ -131,7 +136,7 @@ function Page( props:any) {
                                 <ul>
                                     <li><a href={'../../profile/?id='+props.params.id}><i className="fas fa-user-circle"></i>View profile</a></li>
                                     <li><i className="fas fa-users"></i> Add to close friends</li>
-                                    <li><i className="fas fa-plus"></i> Add to group</li>
+                                    <li onClick={deleteConversation}><i className="fas fa-trash"></i> Delete</li>
                                     <li><i className="fas fa-ban"></i> Block</li>
                                 </ul>
                             </div>

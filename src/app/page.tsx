@@ -5,6 +5,7 @@ import 'bootstrap/js/dist/modal.js';
 import 'bootstrap/js/dist/dropdown.js';
 import 'bootstrap/js/dist/collapse.js';
 import '@fortawesome/fontawesome-free/css/all.min.css';
+import './log/log.css'
 import Modal from './modal/modal';
 import Nav from './navbar/nav';
 import Post from './post/post';
@@ -51,7 +52,7 @@ interface registerData {
 }
 
 export default function Home() {
-    const baseUrl = 'http://192.168.1.103:8000';
+    const baseUrl = 'https://seapi.pythonanywhere.com';
     const baseMode = localStorage.getItem('mode');
     const token = localStorage.getItem('token');
     const [mode, setMode] = useState<string | null>();
@@ -69,14 +70,14 @@ export default function Home() {
     const [i, setMe ] = useState<any >({})
     const [hasMore, setHasMore] = useState<boolean>(true);
     const [logs,setLog] = useState<any[]>([])
-    const loaderRef = useRef()
+    const loaderRef = useRef<any>()
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    async function getPosts() {
-        if (url != null){
+    async function getPosts(u=url) {
+        if (u != null){
             const Req = new Requests();
-            const data = await Req.getPosts(url);
-            setPosts(data.results);
+            const data = await Req.getPosts(u);
+            setPosts(posts.concat(data.results));
             if (data.next == 'null') {
                 setHasMore(false);
                 return
@@ -94,10 +95,6 @@ export default function Home() {
             localStorage.setItem("me",JSON.stringify(data))
         } 
     }
-
-
-    
-
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
     function apiRec() {
@@ -175,6 +172,8 @@ export default function Home() {
                 showModal={showModal}
                 setShowModal={setShowModal}
                 setME={setMe}
+                baseUrl={baseUrl}
+                getPosts={getPosts}
                 logs={logs}
                 log={setLog}
             />
@@ -210,12 +209,13 @@ export default function Home() {
                 log={setLog}
             />
             <VideoModal 
+                url={baseUrl+"/api/posts/"}
                 createVideo={createVideo}
                 setCreateVideo={setCreateVideo}
                 videoData={videoData}
                 setVideoData={setVideoData}
                 setVideos={setPosts} 
-                url={baseUrl}
+                logs={logs}
                 log={setLog}
             />
             <div className="container">
@@ -287,7 +287,8 @@ export default function Home() {
                                 </div>
                             }
                         </div>
-                        <div ref={loaderRef} className='obs'><div className="spinner-border"></div></div>
+                        
+                        <div ref={loaderRef? loaderRef : null} className='obs'><div className="spinner-border"></div></div>
                     </div>
                 </div>
             </div>
@@ -298,7 +299,7 @@ export default function Home() {
                     })
                 : 
                    ""
-                }
+            }
             </div>
         </main>
     );

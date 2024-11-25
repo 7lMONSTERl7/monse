@@ -4,16 +4,18 @@ import React, { useState } from 'react';
 import { Modal, Button } from 'react-bootstrap';
 import { Requests } from '../utiles/Requests';
 
-function CustomModal({ userData, whoAmI, setME ,setData, setAuthStatus, showModal, setShowModal,logs,log }) {
+function CustomModal({ userData, whoAmI, setME ,setData, setAuthStatus, showModal, setShowModal, getPosts, baseUrl,logs,log }) {
     async function login() {
         const Req = new Requests();
         try {
             await Req.login(userData, whoAmI, setAuthStatus, setShowModal,log);
             setAuthStatus(true);
-            const data = whoAmI()
+            log([...logs,'LOGIN Successful',`Welcome ${userData.username}`])
+            const data =await whoAmI()
             if (data){
+                getPosts(baseUrl+'/api/posts/')
                 setME(data)
-                log([...logs,'LOGIN Successful',`Welcome ${userData.username}`])
+                
             }
             setShowModal(false);
         } catch (error) {

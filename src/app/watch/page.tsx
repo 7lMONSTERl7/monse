@@ -5,14 +5,16 @@ import 'bootstrap/js/dist/modal.js'
 import 'bootstrap/js/dist/dropdown.js'
 import 'bootstrap/js/dist/collapse.js'
 import '@fortawesome/fontawesome-free/css/all.min.css';
+import './../log/log.css'
 import Modal from './../modal/modal'
 import Nav from './../navbar/nav'
 import Video from './../video/Video'
 import VideoModal from './../modal/cVideo'
-import InfiniteScroll from 'react-infinite-scroller'
+import Log from './../log/log';
 import RegisterModal from './../modal/register'
 import { Requests } from './../utiles/Requests'
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { isArray } from 'util'
 
 interface Video{
     key:number,
@@ -60,20 +62,25 @@ export default function Home() {
     const [isReacted,setReacted] = useState<boolean>(false)
     const [url,setUrl] = useState<string>(baseUrl + '/api/videos/')
     const [hasMore,setHasMore] = useState<boolean>(true)
-    const [i, setMe ] = useState<any >({})
+    const [logs,setLog] = useState<any[]>([])
+    const [i, setMe ] = useState<any>([])
+    const loaderRef = useRef<any>()
     
     
     
-    async function getPosts() {
-        const Req = new Requests();
-        const data = await Req.getPosts(url);
-        setVideos(data.results);
-        setUrl(data.next);
-        if (!data.next) {
-            setHasMore(false);
-            return
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    async function getPosts(u=url) {
+        if (u != null){
+            const Req = new Requests();
+            const data = await Req.getPosts(u);
+            setVideos(videos.concat(data.results));
+            if (data.next == 'null') {
+                setHasMore(false);
+                return
+            }
+            setHasMore(true);
+            setUrl(data.next);
         }
-        setHasMore(true);
     } 
     
     async function whoAmI() {
@@ -85,35 +92,24 @@ export default function Home() {
         } 
     }
 
-    async function myInfoController(){
-        const me = localStorage.getItem('me')
-        if (!me){
-            await whoAmI()
-        }
-    }
-
-    async function loadMorePosts(){
-        const Req = new Requests();
-        const morePosts = await Req.getPosts(url);
-        if (!morePosts.next) {
-            setHasMore(false);
-        }
-        setVideos(prevPosts => [...prevPosts, ...morePosts.results]);
-        setUrl(morePosts.next);
-    }
-
-    function apiRec(){
-        const bcUrl = localStorage.getItem(baseUrl)
-        if (!bcUrl && token){
-            localStorage.setItem('baseUrl',baseUrl)
+     // eslint-disable-next-line react-hooks/exhaustive-deps
+     function apiRec() {
+        const bcUrl = localStorage.getItem('baseUrl');
+        if (!bcUrl || token) {
+            localStorage.setItem('baseUrl', baseUrl);
         }
     }
 
 
-    useEffect(()=>{
-        token ? (setAuthStatus(true),whoAmI()) : setAuthStatus(false)  
-        myInfoController()
-    },[token])
+    useEffect(() => {
+        if (token) {
+            setAuthStatus(true);
+            whoAmI();
+        } else {
+            setAuthStatus(false);
+        }
+        
+    }, [token]);
 
     useEffect(()=>{
         getPosts()
@@ -131,19 +127,58 @@ export default function Home() {
         
     }, [mode])
 
+    useEffect(() => {
+        if (isArray(logs) && logs != undefined) {
+          const timer = setTimeout(() => {
+            setLog((logs) => logs.slice(1));
+          }, 4000);
+    
+          return () => clearTimeout(timer); 
+        }
+      }, [logs]);
+
+    useEffect(()=>{
+        const observer = new IntersectionObserver((entries)=>{
+            const entry = entries[0]
+            if (entry.isIntersecting && hasMore){
+                getPosts()
+            }
+            
+        })
+
+        if (loaderRef.current){
+            observer.observe(loaderRef.current)
+        }
+
+        return ()=>{
+            if (loaderRef.current){
+                observer.unobserve(loaderRef.current)
+            }
+        }
+    },[hasMore,url])
+
     return (
         <main className={mode ? mode : "light"} data-bs-theme={mode}>
             <Modal
                 userData={userData}
                 setData={setUserData}
+                whoAmI={whoAmI}
                 setAuthStatus={setAuthStatus}
                 showModal={showModal}
-                setShowModal={setShowModal} whoAmI={undefined} setME={undefined}            />
+                setShowModal={setShowModal}
+                setME={setMe}
+                baseUrl={baseUrl}
+                getPosts={getPosts}
+                logs={logs}
+                log={setLog}    
+            />
             <RegisterModal
                 registerData={registerData}
                 setRegisterData={setRegisterData}
                 setShowRegister={setShowRegister}
                 showRegister={showRegister}
+                logs={logs}
+                log={setLog}
             />
             <button 
                 id='addones'
@@ -158,46 +193,29 @@ export default function Home() {
                 videoData={videoData}
                 setVideoData={setVideoData}
                 setVideos={setVideos}
-                url={baseUrl}
+                url={baseUrl + "/api/videos/"}
+                logs={logs}
+                log={setLog}
             />
-            <div className="container">
+            <div className="container d-flex flex-column align-items-center">
                 <div className="d-flex flex-column align-items-center">
                     <div className="nav-cont col-11 position-fixed">
                         <Nav 
                             page={page}
+                            url={baseUrl}
                             authStatus={authStatus}
                             setAuthStatus={setAuthStatus}
                             setShowModal={setShowModal}
                             setShowRegister={setShowRegister}
                             mode={mode}
-                            setMode={setMode} Me={undefined}                        />
+                            setMode={setMode} 
+                            Me={i}
+                            logs={logs}
+                            log={setLog}               
+                            />
                     </div>
-                    <div className="posts d-flex flex-column align-items-center mt-5 pt-5 w-100">
-                        <InfiniteScroll
-                            className='col-12 d-flex flex-column align-items-center'
-                            id='infs'
-                            pageStart={0}
-                            initialLoad={false}
-                            loadMore={loadMorePosts}
-                            hasMore={hasMore}
-                            loader={
-                                <div className="card-ph card shadow col-12 mb-5 mt-4" aria-hidden="true">
-                                    <div className="card-body placeholder-glow">
-                                        <span className="placeholder col-7"></span>
-                                        <span className="placeholder col-4"></span>
-                                        <span className="placeholder col-6"></span>
-                                    </div>
-                                    <div className="card-body">
-                                        <h5 className="card-title placeholder-glow">
-                                            <img className='card-img-top placeholder' width={100} height={100} src="" alt="" />
-                                        </h5>
-                                        <hr />
-                                        <a className=" disabled placeholder col-4"></a>
-                                    </div>
-                                </div>
-                            }
-
-                        >
+                    <div className="posts d-flex flex-column align-items-center mt-5 pt-5">
+                        <div className='container'>
                             {
                                 videos.length ? videos.map((post) => (
                                     <Video
@@ -236,9 +254,21 @@ export default function Home() {
                                         </div>
                                     </>
                             }
-                        </InfiniteScroll>
+                            <div ref={loaderRef? loaderRef : null} className='obs w-100'><div className="spinner-border"></div></div>
+                        </div>
+                        
                     </div>  
                 </div>
+                
+            </div>
+            <div className="alerts-container W-25">
+                {(isArray(logs) && logs != undefined) ? 
+                    logs.map((e:any)=>{
+                        return  <Log log={e}/>
+                    })
+                : 
+                   ""
+                }
             </div>
         </main>
     );

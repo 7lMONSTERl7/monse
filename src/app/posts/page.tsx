@@ -11,6 +11,7 @@ import Log from '../log/log'
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { Requests } from './../utiles/Requests'
+import { isArray } from 'util';
 
 function Posts(){
     const url = localStorage.getItem('baseUrl')
@@ -37,6 +38,16 @@ function Posts(){
         await Req.getSingleVideo(id,setPostData)
         setIsPost(false)
     }
+
+    useEffect(() => {
+        if (isArray(logs) && logs != undefined) {
+          const timer = setTimeout(() => {
+            setLog((logs) => logs.slice(1));
+          }, 4000);
+    
+          return () => clearTimeout(timer); 
+        }
+      }, [logs]);
 
     useEffect(()=>{
         const ID = searchParams.get('id');
@@ -69,6 +80,8 @@ function Posts(){
                                 postComments={postData.comments}
                                 ago={postData.created_at}
                                 setPostData={setPostData}
+                                logs={logs}
+                                log={setLog}
                             />
                             :
                                 <Video
@@ -93,17 +106,20 @@ function Posts(){
                     : 
                         <div className='alert col-11 alert-danger d-flex justify-content-center align-items-center '>There is no post</div>
                 }
-            {(logs.length > 0 && logs!= undefined) ? 
-                    logs.map((e:any)=>{
-                           setTimeout(() => {
-                            setLog(logs.shift())
-                        }, 7000);
-                        return  <Log log={e}/>
-                    })
-                : 
-                ""
-                }
-            </div>
+                <div className="alerts-container">
+                    {(logs.length > 0 && logs!= undefined) ? 
+                            logs.map((e:any)=>{
+                                setTimeout(() => {
+                                    setLog(logs.shift())
+                                }, 7000);
+                                return  <Log log={e}/>
+                            })
+                        : 
+                            ""
+                    }
+                </div>
+                
+                </div>
             
         </>
     )

@@ -10,16 +10,21 @@ interface Video{
     setVideoData:Dispatch<SetStateAction<any>>,
     setCreateVideo:Dispatch<SetStateAction<boolean>>,
     setVideos:Dispatch<SetStateAction<any>>,
+    logs:any[]
     log:Dispatch<SetStateAction<String[]>>,
     url:string,
 }
 
-function VideoModal({ url,createVideo,videoData,setVideoData,setCreateVideo,setVideos ,log}:Video){
+function VideoModal({ url,createVideo,videoData,setVideoData,setCreateVideo,setVideos,logs ,log}:Video){
     async function publishVideo(){
-        const Req = new Requests
-        await Req.publishVideo(videoData,setCreateVideo,log)
-        const data = await Req.getPosts(url)
-        await setVideos(data)
+        try{
+            const Req = new Requests
+            await Req.publishVideo(videoData,setCreateVideo, logs,log)
+            log([...logs,"Post Published Successfuly !!!"])
+            await Req.getPosts(url)
+        }catch{
+            log([...logs,'Video not published !!!'])
+        }
     }
     return (
         <>

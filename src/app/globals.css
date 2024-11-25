@@ -121,25 +121,6 @@ main.dark {
   font-size: 0.8em;
 }
 
-.alerts-container{
-  position: fixed;
-  bottom: 1em;
-  right: 1em;
-  width: 30vw;
-}
-
-.log{
-  position: relative;
-  width: 95%;
-}
-
-.log button{
-  position: absolute;
-  right: 1em;
-  top: 20%;
-  background: none;
-  border: transparent;
-}
 
 .log button span{
   font-size: 1.5em;
@@ -151,4 +132,5 @@ main.dark {
   display: flex;
   align-items: center;
   justify-content: center;
+  margin: 2em 0;
 }

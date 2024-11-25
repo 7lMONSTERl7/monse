@@ -14,13 +14,15 @@ interface posts{
     postComments: any[],
     ago:string,
     setPostData:any,
+    logs:any[],
+    log:any,
 }
 
-function Post({authorId,postID,user,title,userImg,postImg,postContent,commentsCount,postComments,setPostData,ago}:posts){
+function Post({authorId,postID,user,title,userImg,postImg,postContent,commentsCount,postComments,setPostData,ago,logs,log}:posts){
     const [comment,setComment] = useState<any>()
     async function createComment(){
         const Req = new Requests()
-        await Req.createComment(true,comment,setComment,postID)
+        await Req.createComment(true,comment,setComment,postID,logs,log)
         await Req.getSinglePost(`${postID}`,setPostData)
         setComment('')
     }

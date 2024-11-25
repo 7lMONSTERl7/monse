@@ -121,7 +121,7 @@ class Requests {
                 })
             });
             const data = await res.json();
-            if (logs){log([...logs,data.message])}else{log(data.message)}
+            if (logs){log([...logs,data.message])}else{log([...logs,data.message])}
             ;
             setComment('');
         } else {
@@ -216,7 +216,7 @@ class Requests {
         setCreatePost(false);
     }
 
-    async publishVideo(videoData: any, setCreateVideo: any,log:any) {
+    async publishVideo(videoData: any, setCreateVideo: any, logs:any[],log:any) {
         const { title, body, video } = videoData;
         const token = localStorage.getItem('token');
         const formData = new FormData();
@@ -233,11 +233,11 @@ class Requests {
             body: formData
         });
         const data = await res.json();
-        log(data.message);
+        log([...logs,data.message]);
         setCreateVideo(false);
     }
 
-    async postReact(post:boolean,postID:any, reacted:any, setReacted:any, setLikesCount:any, LikesCount:any,log:any) {
+    async postReact(post:boolean,postID:any, reacted:any, setReacted:any, setLikesCount:any, LikesCount:any) {
         let newReactedState = !reacted;
         if (this.token) {
             const res = await fetch(`${this.url}/api/${post ? 'posts' : 'videos'}/`, {
@@ -316,9 +316,9 @@ class Requests {
         return data;
     }
 
-    async sendMessage(receiver: number | undefined, message: string | undefined,log:any) {
+    async sendMessage(receiver: number | undefined, message: string | undefined) {
         if (!receiver || !message) {
-            log('Please enter a message');
+            alert('Please enter a message');
             return;
         }
         const res = await fetch(`${this.url}/api/chat/conversation/`, {
@@ -368,6 +368,7 @@ class Requests {
         const res = await fetch(`${this.url}/api/chat/conversation/`, {
             method: 'DELETE',
             headers: {
+                "Content-Type": "application/json",
                 'Authorization': `Token ${this.token}`,
                 "ngrok-skip-browser-warning": "true"
             },
@@ -375,8 +376,6 @@ class Requests {
                 "receiver": receiver,
             })
         });
-        const data = await res.json();
-        return data;
     }
 }
 

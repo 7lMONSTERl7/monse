@@ -46,7 +46,7 @@ function Video({ me,postID, authorId, user, title, userImg, video, videoContent,
     },[])
 
     return (
-        <div className="card shadow col-10 my-4">
+        <div className="card shadow col-12 my-4">
             <div className="card-header d-flex">
                 <img
                     className="img-thumbnail border border-2 rounded-circle"
