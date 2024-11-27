@@ -63,7 +63,7 @@ function Main(){
                         <input 
                             type="text"
                             placeholder="Search..."
-                            className="form-control search bg-light" 
+                            className="form-control search bg-dark" 
                             onChange={async (e)=>{    
                                 await setSearchQuery(e.target.value)
                                 e.target.value ? search() : getUsers()
