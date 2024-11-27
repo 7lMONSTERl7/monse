@@ -1,9 +1,6 @@
 "use client"
 
 import 'bootstrap/dist/css/bootstrap.min.css'
-import 'bootstrap/js/dist/modal.js'
-import 'bootstrap/js/dist/dropdown.js'
-import 'bootstrap/js/dist/collapse.js'
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import './../log/log.css'
 import Modal from './../modal/modal'
@@ -45,11 +42,22 @@ interface registerData{
     bio:string,
 }
 
+
+
 export default function Home() {
-    const baseUrl = '' + localStorage.getItem('baseUrl')
+    const baseUrl = 'https://seapi.pythonanywhere.com'
+    const [baseMode,setBaseMod] = useState<any>()
+    const [token,setToken] = useState<any>()
+    useEffect(() => {
+        // Dynamically import Bootstrap JS modules
+        import('bootstrap/js/dist/modal');
+        import('bootstrap/js/dist/dropdown');
+        import('bootstrap/js/dist/collapse');
+        setBaseMod(localStorage.getItem('mode'))
+        setToken(localStorage.getItem('token'))
+      }, []);
+    
     const page  = '| VIDEO'
-    const baseMode = localStorage.getItem('mode')
-    const token = localStorage.getItem('token')
     const [mode, setMode] = useState<string | null>()
     const [videos, setVideos] = useState<Video[]>([])
     const [userData,setUserData] = useState<userData[]>([])

@@ -2,8 +2,6 @@
 
 import 'bootstrap/dist/css/bootstrap.min.css'
 import '@fortawesome/fontawesome-free/css/all.min.css';
-import 'bootstrap/js/dist/dropdown.js'
-import 'bootstrap/js/dist/collapse.js'
 import Nav from '../profile/nav/nav'
 import Post from './post/post'
 import Video from './video/Video'
@@ -14,7 +12,7 @@ import { Requests } from './../utiles/Requests'
 import { isArray } from 'util';
 
 function Posts(){
-    const url = localStorage.getItem('baseUrl')
+    const url = "https://seapi.pythonanywhere.com"
     const searchParams = useSearchParams();
     const [logs,setLog] = useState<any[]>([])
     const [isPost, setIsPost] = useState<boolean>(true)
@@ -27,6 +25,11 @@ function Posts(){
         },
         comments:[]
     })
+
+    useEffect(() =>{
+        import('bootstrap/js/dist/dropdown.js')
+        import('bootstrap/js/dist/collapse.js')
+    },[])
 
     async function getPost(id:string){
         const Req = new Requests()
@@ -76,7 +79,7 @@ function Posts(){
                                 userImg={`${url}${postData.author.profile_picture}`}
                                 postImg={`${url}${postData.img}`}
                                 postContent={postData.body}
-                                commentsCount={postData.comments_count}
+                                commentsCount={postData.comments_count ? postData.comments_count : 0}
                                 postComments={postData.comments}
                                 ago={postData.created_at}
                                 setPostData={setPostData}

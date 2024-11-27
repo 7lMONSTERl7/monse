@@ -1,15 +1,11 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+   // output : "export",
     images: {
         remotePatterns: [
             {
                 protocol: 'https',
-                hostname: 'sloth-possible-reindeer.ngrok-free.app',
-                pathname: '/**',
-            },
-            {
-                protocol: 'http',
-                hostname: '192.168.8.110',
+                hostname: 'seapi.pythonanywhere.com',
                 pathname: '/**',
             },
             {
@@ -22,6 +18,7 @@ const nextConfig = {
                 hostname: '192.168.1.103',
                 pathname: '/**',
             },
+
         ],
     },
 };

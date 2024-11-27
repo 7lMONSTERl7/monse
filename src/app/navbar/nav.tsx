@@ -6,16 +6,16 @@ import "./../toggler/style.css";
 
 interface NavParams {
     authStatus: boolean,
-    url:string,
+    url: string,
     setShowModal: Dispatch<SetStateAction<boolean>>,
     setShowRegister: Dispatch<SetStateAction<boolean>>,
     setAuthStatus: Dispatch<SetStateAction<boolean>>,
     mode: string | null | undefined,
     page: string,
-    setMode: Dispatch<SetStateAction<string | null | undefined>>
+    setMode: Dispatch<SetStateAction<string | null | undefined>>,
     Me: any | undefined,
-    log:any,
-    logs:String[],
+    log: any,
+    logs: String[],
 }
 
 interface userDataParams {
@@ -24,34 +24,45 @@ interface userDataParams {
     profile_picture: any,
 }
 
-function Nav({ page, url,Me, authStatus, setShowModal, setShowRegister, setAuthStatus, mode, setMode,logs,log }: NavParams) {
+function Nav({
+    page, url, Me, authStatus, setShowModal, setShowRegister, setAuthStatus,
+    mode, setMode, logs, log
+}: NavParams) {
     const [localMode, setLocalMode] = useState<boolean>(false);
     const [userData, setUserData] = useState<userDataParams | undefined>();
 
     useEffect(() => {
-        // Initialize localMode based on localStorage
-        const baseMode = localStorage.getItem('mode');
-        setLocalMode(baseMode === "dark");
+        if (typeof window !== 'undefined') {
+            const baseMode = localStorage.getItem('mode');
+            setLocalMode(baseMode === "dark");
+        }
     }, []);
 
     useEffect(() => {
-        // Sync localStorage with localMode
-        localStorage.setItem('mode', localMode ? 'dark' : 'light');
-        setMode(localMode ? 'dark' : 'light');
+        if (typeof window !== 'undefined') {
+            localStorage.setItem('mode', localMode ? 'dark' : 'light');
+            setMode(localMode ? 'dark' : 'light');
+        }
     }, [localMode, setMode]);
 
     useEffect(() => {
-        const token = localStorage.getItem('token');
-        const me = localStorage.getItem('me');
-        
-        if (token && me) {
-            setAuthStatus(true);
-            setUserData(JSON.parse(me));
-        } else {
-            setAuthStatus(false);
-            setUserData(undefined);
+        if (typeof window !== 'undefined') {
+            const token = localStorage.getItem('token');
+            const me = localStorage.getItem('me');
+            
+            if (token && me) {
+                setAuthStatus(true);
+                setUserData(JSON.parse(me));
+            } else {
+                setAuthStatus(false);
+                setUserData(undefined);
+            }
         }
     }, []);
+
+    const profileImageSrc = Me && Me.profile_picture
+        ? `${url}${Me.profile_picture}`
+        : "/media/base.png";  // Default image path when profile picture is not available
 
     return (
         <nav className={`navbar bg-${mode} shadow navbar-expand-lg bg-body-tertiary rounded mt-1 z-3`}>
@@ -63,26 +74,23 @@ function Nav({ page, url,Me, authStatus, setShowModal, setShowRegister, setAuthS
                 <div className={`user d-${authStatus ? "flex" : "none"} text-${mode === "dark" ? "light" : "dark"}`}>
                     {
                         Me ? (
-                                <>
-                                    <Image
-                                        className="img-thumbnail border border-2 rounded-circle shadow"
-                                        src={`${url}${Me.profile_picture || "/media/base.png"}`}
-                                        alt="Profile"
-                                        width={50}
-                                        height={50}
-                                        onClick={() => { window.location.href = `/profile`; }}
-                                    />
-                                    <div className="user-details d-flex flex-column justify-content-center">
-                                        <em className="mx-2">{Me.username || ""}</em>
-                                        <h6 className="nav-mail mx-3 fs-6">{Me.email || ""}</h6>
-                                    </div>
-                                </>
-                            )
-                        :
-                            null
-
+                            <>
+                                <Image
+                                    className="img-thumbnail border border-2 rounded-circle shadow"
+                                    src={profileImageSrc}  // Use the calculated image source here
+                                    alt="Profile"
+                                    width={50}
+                                    height={50}
+                                    onClick={() => { window.location.href = `/profile`; }}
+                                />
+                                <div className="user-details d-flex flex-column justify-content-center">
+                                    <em className="mx-2">{Me.username || ""}</em>
+                                    <h6 className="nav-mail mx-3 fs-6">{Me.email || ""}</h6>
+                                </div>
+                            </>
+                        )
+                        : null
                     }
-
                 </div>
                 <button
                     className="navbar-toggler"
@@ -136,7 +144,7 @@ function Nav({ page, url,Me, authStatus, setShowModal, setShowRegister, setAuthS
                                             localStorage.removeItem('token');
                                             localStorage.removeItem('me');
                                             setAuthStatus(false);
-                                            log([...logs,'Logged out !!!'])
+                                            log([...logs, 'Logged out !!!'])
                                         }}
                                     >
                                         <i className="fas fa-door-open"></i> Logout

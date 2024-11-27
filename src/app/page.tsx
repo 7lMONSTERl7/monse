@@ -1,9 +1,6 @@
 "use client";
 
 import 'bootstrap/dist/css/bootstrap.min.css';
-import 'bootstrap/js/dist/modal.js';
-import 'bootstrap/js/dist/dropdown.js';
-import 'bootstrap/js/dist/collapse.js';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import './log/log.css'
 import Modal from './modal/modal';
@@ -53,8 +50,8 @@ interface registerData {
 
 export default function Home() {
     const baseUrl = 'https://seapi.pythonanywhere.com';
-    const baseMode = localStorage.getItem('mode');
-    const token = localStorage.getItem('token');
+    const [baseMode,setBaseMode] = useState<string | null>('light');
+    const [token,setToken] = useState<string | null>(null);
     const [mode, setMode] = useState<string | null>();
     const [posts, setPosts] = useState<Post[]>([]);
     const [userData, setUserData] = useState<userData[]>([]);
@@ -71,6 +68,15 @@ export default function Home() {
     const [hasMore, setHasMore] = useState<boolean>(true);
     const [logs,setLog] = useState<any[]>([])
     const loaderRef = useRef<any>()
+
+    useEffect(() => {
+        import('bootstrap/js/dist/modal.js')
+        import('bootstrap/js/dist/dropdown.js')
+        import('bootstrap/js/dist/collapse.js')
+        setBaseMode(localStorage.getItem('mode'))
+        setToken(localStorage.getItem('token'))
+
+    },[])
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
     async function getPosts(u=url) {

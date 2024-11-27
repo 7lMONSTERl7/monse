@@ -3,22 +3,30 @@
 import User from './../user/user'
 import { Requests } from './../../utiles/Requests'
 import { useEffect, useState } from 'react'
-import Toast from '../toast/toast'
 
 
 
 function Main(){
-    const token = localStorage.getItem('token')
+    const [token,setToken] = useState<string | null>() 
     const [Users,setUsers] = useState<any[]>([{'id':0}])
     const [searchQuery,setSearchQuery] = useState<string>("")
     const [inbox , setInbox] = useState<any[]>([])
     const [isInbox, setIsInbox] = useState<boolean>(true)
+    const baseUrl = "https://seapi.pythonanywhere.com"
     
-    const baseUrl = localStorage.getItem('baseUrl')
-
-    if(!token){
-        window.location.href = '../'
+    async function isLogedHandler() {
+        const tokenFromStorage = localStorage.getItem('token');
+        setToken(tokenFromStorage);
+        if (tokenFromStorage === null) {
+            window.location.href = '../'; 
+        }
     }
+
+    useEffect(() => {
+        isLogedHandler();
+        
+    }, []); 
+
 
     async function getUsers(){
         const Req = new Requests()
@@ -26,7 +34,6 @@ function Main(){
         console.log(userData)
         await setUsers(userData)
     }
-    
 
     async function getInboxAlerts(){
         const Req = new Requests()
@@ -47,9 +54,6 @@ function Main(){
         getInboxAlerts()
         getUsers()
     },[])
-
-    
-
 
     return (
         <div className="container chat mt-5 rounded">

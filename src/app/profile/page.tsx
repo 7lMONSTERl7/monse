@@ -1,51 +1,52 @@
-"use client"
+"use client"; // Ensures this page is client-side rendered
 
+import 'bootstrap/dist/css/bootstrap.min.css'; // Import Bootstrap CSS
+import '@fortawesome/fontawesome-free/css/all.min.css'; // Import FontAwesome CSS
+import './globals.css'; // Import your custom global styles
 import { useSearchParams } from 'next/navigation';
-import 'bootstrap/dist/css/bootstrap.min.css'
-import '@fortawesome/fontawesome-free/css/all.min.css';
-import './globals.css'
-import 'bootstrap/js/dist/dropdown.js'
-import 'bootstrap/js/dist/collapse.js'
-import { useEffect, useState } from 'react'
-import Nav from './nav/nav'
-import { Requests } from "./../utiles/Requests"
+import { useEffect, useState } from 'react';
+import Nav from './nav/nav';
+import { Requests } from './../utiles/Requests';
 
-function Profile(){
+function Profile() {
     const searchParams = useSearchParams();
-    const [userInfo,setUserInfo] = useState<any>({})
-    const token = localStorage.getItem('token')
+    const [userInfo, setUserInfo] = useState<any>({});
+    const [token, setToken] = useState<string | null>(null);
 
-    async function init(){
-        const Id = await searchParams.get('id');
-        if (Id){
-            const Req = new Requests()
-            const data = await Req.getInfo(Id)
-            setUserInfo(data)
-        }else{
-            const Req = new Requests()
-            const data = await Req.getMyInfo()
-            setUserInfo(data)
+    async function init() {
+        const Id = searchParams.get('id');
+        const Req = new Requests();
+        let data;
+
+        if (Id) {
+            data = await Req.getInfo(Id);
+        } else {
+            data = await Req.getMyInfo();
         }
-        
+
+        setUserInfo(data);
     }
 
-    useEffect(()=>{
-        init()
-    },[])
+    useEffect(() => {
+        const storedToken = localStorage.getItem('token');
+        setToken(storedToken);
 
-    if (token){
-        const baseUrl = localStorage.getItem('baseUrl')
-        
+        if (storedToken) {
+            init();
+        }
+    }, []);
+
+    if (token != null) {
+        const baseUrl = 'https://seapi.pythonanywhere.com';
+
         return (
-            <main className='d-flex flex-column align-items-center'>
-                <div className="nav-md col-12 d-flex flex-column align-items-center ">
+            <main className="d-flex flex-column align-items-center">
+                <div className="nav-md col-12 d-flex flex-column align-items-center">
                     <div className="nav-cont col-11 z-3">
-                        <Nav
-                            page='Profile'
-                        />
+                        <Nav page="Profile" />
                     </div>
                 </div>
-                <div className="col-11 d-flex flex-column justify-content-center mt-5 bg-light ">
+                <div className="col-11 d-flex flex-column justify-content-center mt-5 bg-light">
                     <div className="container">
                         <div className="heading d-flex align-items-center fs-6">
                             <div className="mx-2">
@@ -59,15 +60,15 @@ function Profile(){
                             </div>
                         </div>
                     </div>
-                    <div className="container col-10 position-relative d-flex flex-column justify-content-center p-0 ">
+                    <div className="container col-10 position-relative d-flex flex-column justify-content-center p-0">
                         <div className="img-container">
                             <img className="rounded" src={`${baseUrl}${userInfo.cover_picture}`} width="100%" alt=".." />
-                        </div>             
+                        </div>
                         <div className="css d-block position-relative">
                             <img className="img-thumbnail rounded-circle position-absolute top-50 start-50 translate-middle" src={`${baseUrl}${userInfo.profile_picture}`} alt="" />
                         </div>
                         <div className="container col-11">
-                            <div className="details fs-3 fw-bolder col-12 ">
+                            <div className="details fs-3 fw-bolder col-12">
                                 <div className="mainly d-flex flex-column">
                                     <span>{userInfo.username}</span>
                                     <em className="fs-5 fw-normal my-2">@{userInfo.username}</em>
@@ -79,7 +80,6 @@ function Profile(){
                                             <span className="fw-bold">0</span>
                                             <span className="fw-normal">| Friends</span>
                                         </div>
-                                        
                                     </div>
                                 </div>
                             </div>
@@ -91,16 +91,14 @@ function Profile(){
                     </div>
                 </div>
             </main>
-        )
-    }else{
+        );
+    } else {
         return (
-            <>
-                <div className="alert alert-danger d-flex justify-content-center">Sorry you have to LOGIN First</div>
-            </>
-        )
+            <div className="alert alert-danger d-flex justify-content-center">
+                Sorry, you have to LOGIN First
+            </div>
+        );
     }
-
 }
 
-
-export default Profile
+export default Profile;

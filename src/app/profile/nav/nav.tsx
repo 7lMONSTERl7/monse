@@ -13,16 +13,23 @@ interface userDataParams{
 }
 
 function Nav({ page }:Page){
-    const Me = localStorage.getItem('me')
-    const baseUrl = localStorage.getItem('baseUrl')
+    const [Me,setMe] = useState<any>()
+    const baseUrl = "https://seapi.pythonanywhere.com"
     const [userData,setUserData] = useState<userDataParams>()
     
     useEffect(()=>{
-        Me ?
-            setUserData(JSON.parse(Me))
-        : 
-            null
+        
     }, [])
+
+    useEffect(()=>{
+        if (localStorage.getItem('me') != null){
+            const user = localStorage.getItem("me")
+            setMe(user)
+            setUserData(JSON.parse(user ? user : "User"))
+        }
+            
+     
+    },  [])
 
     return (
         <nav className="navbar shadow navbar-expand-lg bg-body-tertiary rounded mt-1 z-3">
