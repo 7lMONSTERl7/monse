@@ -89,6 +89,7 @@ main .container .posts #thumb {
 main .container .posts .card .card-header img {
   cursor: pointer;
 }
+
 main .container .posts .card .card-body .post-details h5 {
   font-weight: bold;
 }
@@ -110,11 +111,7 @@ main.dark {
   background: #000;
 }
 
-@media (max-width: 455px) {
-  .nav-mail {
-    display: none;
-  }
-}/*# sourceMappingURL=globals.css.map */
+
 
 .lighter{
   font-weight: 400;
@@ -133,4 +130,25 @@ main.dark {
   align-items: center;
   justify-content: center;
   margin: 2em 0;
+}
+
+.posts,.card-ph{
+  width: 90vw !important;
+}
+
+@media (max-width: 505px) {
+  .nav-mail {
+    display: none;
+  }
+  .posts,.card-ph{
+    width: 100vw !important;
+  }
+
+  .cm{
+    font-size: 0.8em !important;
+  }
+
+  main .container .posts .card .card-body .post-details {
+    font-size: 0.8em !important;
+  }
 }

@@ -51,3 +51,13 @@ body .container .card-body #comments .card .card-header .comment-img {
   background: none;
   border: transparent;
 }
+
+.post{
+  width: 100vw !important;
+}
+
+@media (max-width: 400px) {
+  .log{
+    width: 50vw;
+  }
+}

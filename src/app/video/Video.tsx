@@ -74,9 +74,9 @@ function Video({ me,postID, authorId, user, title, userImg, video, videoContent,
                 </video>
                 <div className="post-details mt-3 position-relative">
                     <hr />
-                    <span>
+                    <span className='cm'>
                         <i className="fas fa-pen"></i>
-                        {`(${videoComments}) comments`}
+                        {" | "+videoComments} comments
                     </span>
                     <span id="react">
                     {likesCount > 1 ? <span className='lighter'>liked by <strong>{likes[0].author.username}</strong> and <strong>{likesCount != 0 ? likesCount-1 : ""}</strong> others</span> : ""}

@@ -27,7 +27,7 @@ function Post({authorId,postID,user,title,userImg,postImg,postContent,commentsCo
         setComment('')
     }
     return (
-        <div id="post" className="card shadow col-10 my-4">
+        <div id="post" className="card post shadow col-10 my-4">
             <div className="card-header d-flex">
                 <img className="img-thumbnail border border-2 rounded-circle" src={userImg} alt="" width='50px' onClick={()=>{window.location.href = `/profile?id=${authorId}`}} />
                 <div className="user-details">
@@ -77,7 +77,7 @@ function Post({authorId,postID,user,title,userImg,postImg,postContent,commentsCo
                             createComment()
                         }}
                     >
-                        Comment
+                        <i className="fas fa-location-arrow"></i>
                     </button>
                 </div>
             </div>

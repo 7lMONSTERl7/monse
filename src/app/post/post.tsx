@@ -22,7 +22,7 @@ interface PostProps {
     me: any,
 }
 
-function Post({ me,postID, authorId, user, title, userImg, postImg, postContent, postComments, ago, likes,likesCount, isReacted }: PostProps) {
+function Post({ me,postID, authorId, user, title, userImg, postImg, postContent, postComments, ago, likes,likesCount}: PostProps) {
     const [reacted, setReacted] = useState<boolean>(false);
     const [LikesCount, setLikesCount] = useState<number>(likesCount);
     const [reacts,setReacts] = useState<number[]>([])
@@ -45,7 +45,7 @@ function Post({ me,postID, authorId, user, title, userImg, postImg, postContent,
    
     useEffect(()=>{
         allLikes()
-    }, [])
+    }, [likes])
 
     return (
         <div className="card shadow col-12 my-4" key={postID}>
@@ -88,9 +88,9 @@ function Post({ me,postID, authorId, user, title, userImg, postImg, postContent,
                 <div className="d-flex justify-content-between align-items-center">
                     <div className="post-details mt-3 position-relative w-100">
                         <hr />
-                        <span>
+                        <span className='cm'>
                             <i className="fas fa-pen"></i>
-                            {`(${postComments}) comments`}
+                             {" | "+postComments} comments
                         </span>
                         <span id="react">
 

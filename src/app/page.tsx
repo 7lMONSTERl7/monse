@@ -224,7 +224,7 @@ export default function Home() {
                 logs={logs}
                 log={setLog}
             />
-            <div className="container">
+            <div className="container w-100">
                 <div className="d-flex flex-column align-items-center">
                     <div className="nav-cont col-11 position-fixed">
                         <Nav 
@@ -241,7 +241,7 @@ export default function Home() {
                             log={setLog}
                         />
                     </div>
-                    <div className="posts d-flex flex-column align-items-center mt-5 pt-5">
+                    <div className="posts d-flex flex-column align-items-center mt-5 pt-5 " >
                         <div>
 
                             {posts != undefined && posts.length > 0 ? posts.map((post, index) => (
@@ -262,7 +262,7 @@ export default function Home() {
                                     me={i.id}
                                 />
                             )) : 
-                                <div className="card card-ph h-75 card shadow col-12 mb-5 mt-4" aria-hidden="true">
+                                <div className="card card-ph h-75 card shadow mb-5 mt-4" aria-hidden="true">
                                     
                                     <div className="card-header d-flex">
                                         <Image 
@@ -281,7 +281,7 @@ export default function Home() {
                                     <div className="card-body">
                                         <h5 className="card-title placeholder-glow">
                                             <Image className='card-img placeholder' width={100} height={100} src="" alt="" />
-                                        </h5>
+                                         </h5>
                                         <div className="card-body placeholder-glow">
                                             <span className="placeholder col-7"></span>
                                             <span className="placeholder col-4"></span>

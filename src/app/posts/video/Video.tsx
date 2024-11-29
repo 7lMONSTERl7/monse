@@ -16,18 +16,13 @@ interface VideoProps {
     videoComments: string[];
     videoCommentsCount: number;
     ago: string;
-    likesCount: number;
-    isReacted: boolean;
-    setReacted: any,
     setPostData: any,
     log:any,
     logs:string[],
 
 }
 
-function Video({ postID, authorId, user, title, userImg, video, videoContent, videoComments, videoCommentsCount, ago, likesCount, setPostData, isReacted, setReacted,logs,log }: VideoProps) {
-    const [reacted, setLocalReacted] = useState(isReacted);
-    const [localLikesCount, setLocalLikesCount] = useState(likesCount);
+function Video({ postID, authorId, user, title, userImg, video, videoContent, videoComments, videoCommentsCount, ago, setPostData, logs,log }: VideoProps) {
     const [comment,setComment] = useState<any>()
 
     async function createComment(){
@@ -39,7 +34,7 @@ function Video({ postID, authorId, user, title, userImg, video, videoContent, vi
 
 
     return (
-        <div className="card shadow col-10 my-4" >
+        <div className="card post shadow col-10 my-4" >
             <div className="card-header d-flex">
                 <img
                     className="img-thumbnail border border-2 rounded-circle"
@@ -105,7 +100,7 @@ function Video({ postID, authorId, user, title, userImg, video, videoContent, vi
                             createComment()
                         }}
                     >
-                        Comment
+                        <i className="fas fa-location-arrow"></i>
                     </button>
                 </div>
             </div>
