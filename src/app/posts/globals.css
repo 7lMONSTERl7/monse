@@ -53,11 +53,14 @@ body .container .card-body #comments .card .card-header .comment-img {
 }
 
 .post{
-  width: 100vw !important;
+  width: 80vw !important;
 }
 
 @media (max-width: 400px) {
   .log{
     width: 50vw;
+  }
+  .post{
+    width: 80vw !important;
   }
 }

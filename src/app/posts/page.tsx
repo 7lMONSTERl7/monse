@@ -99,9 +99,6 @@ function Posts(){
                                     videoComments={postData.comments}
                                     videoCommentsCount={postData.comments_count}
                                     ago={postData.created_at}
-                                    likesCount={postData.likes_count}
-                                    isReacted={postData.isReacted}
-                                    setReacted={()=>{}}
                                     setPostData={setPostData}
                                     logs={logs}
                                     log={setLog}
