@@ -65,7 +65,7 @@ body,html{
 		}
 		.search{
 			border-radius: 15px !important;
-			background-color: rgba(0,0,0,0.3) !important;
+			background-color: rgb(0,0,0) !important;
 			border:0 !important;
 			color:white !important;
 		}
@@ -241,5 +241,8 @@ body,html{
 		@media(max-width: 576px){
 			.contacts_card{
 				margin-bottom: 15px !important;
+			}
+			.container{
+				width: 100vw;
 			}
 		}
