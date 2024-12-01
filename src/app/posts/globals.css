@@ -61,6 +61,9 @@ body .container .card-body #comments .card .card-header .comment-img {
     width: 50vw;
   }
   .post{
-    width: 80vw !important;
+    width: 100vw !important;
+  }
+  .p-name{
+    font-size: 0.8em !important;
   }
 }

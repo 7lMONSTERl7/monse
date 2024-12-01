@@ -34,7 +34,11 @@ function Nav({ page }:Page){
     return (
         <nav className="navbar shadow navbar-expand-lg bg-body-tertiary rounded mt-1 z-3">
             <div className="container-fluid d-flex justify-content-between">
-                <a className="navbar-brand p-0" href="#"><img src="/logo.png" width={45} alt="" /> | {page} </a>
+                <a className="navbar-brand" href="#">
+                    <img src="/logo.png" width={45} alt="" />
+                    <span className="p-name">| {page} </span>
+                </a>
+                
                 <div className="user d-flex">
                     <img className="img-thumbnail position-static border border-2 rounded-circle shadow" src={`${baseUrl}${userData ? userData.profile_picture : ""}`} alt="" width='50px' onClick={()=>{window.location.href = `/profile`}} />
                     <div className="user-details d-flex flex-column justify-content-center">

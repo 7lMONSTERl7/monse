@@ -35,4 +35,8 @@
   .nav-mail {
     display: none;
   }
+  .p-name{
+    font-size: 0.8em !important;
+  }
+  
 }/*# sourceMappingURL=globals.css.map */

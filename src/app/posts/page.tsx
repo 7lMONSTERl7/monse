@@ -107,16 +107,14 @@ function Posts(){
                         <div className='alert col-11 alert-danger d-flex justify-content-center align-items-center '>There is no post</div>
                 }
                 <div className="alerts-container">
-                    {(logs.length > 0 && logs!= undefined) ? 
-                            logs.map((e:any)=>{
-                                setTimeout(() => {
-                                    setLog(logs.shift())
-                                }, 7000);
-                                return  <Log log={e}/>
-                            })
-                        : 
-                            ""
-                    }
+                {
+                (isArray(logs) && logs != undefined) ? 
+                        logs.map((e:any)=>{
+                            return  <Log log={e}/>
+                        })
+                    : 
+                    ""
+                }
                 </div>
                 
                 </div>

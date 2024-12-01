@@ -299,13 +299,14 @@ export default function Home() {
                 </div>
             </div>
             <div className="alerts-container">
-                {(isArray(logs) && logs != undefined) ? 
-                    logs.map((e:any)=>{
-                        return  <Log log={e}/>
-                    })
-                : 
-                   ""
-            }
+                {
+                (isArray(logs) && logs != undefined) ? 
+                        logs.map((e:any)=>{
+                            return  <Log log={e}/>
+                        })
+                    : 
+                    ""
+                }
             </div>
         </main>
     );
