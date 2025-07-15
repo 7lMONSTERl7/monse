@@ -70,7 +70,7 @@ function Post({ me,postID, authorId, user, title, userImg, postImg, postContent,
                         (postImg && postImg != undefined) ? 
                         
                             <Image
-                                className="img-fluid"
+                                className="img-fluid post-img"
                                 src={postImg}
                                 alt="Post image"
                                 width={1000}
@@ -88,24 +88,26 @@ function Post({ me,postID, authorId, user, title, userImg, postImg, postContent,
                 <div className="d-flex justify-content-between align-items-center">
                     <div className="post-details mt-3 position-relative w-100">
                         <hr />
-                        <span className='cm'>
-                            <i className="fas fa-pen"></i>
-                             {" | "+postComments} comments
-                        </span>
-                        <span id="react">
+                        <div className='interactions'>
+                            <span className='cm'>
+                                <i className="fas fa-pen"></i>
+                                {" | "+postComments} comments
+                            </span>
+                            <span id="react">
 
-                            {likesCount > 1 ? <span className='lighter'>liked by <strong>{likes[0].author.username}</strong> and <strong>{likesCount != 0 ? likesCount-1 : ""}</strong> others</span> : ""}
+                                {likesCount > 1 ? <span className='lighter'>liked by <strong>{likes[0].author.username}</strong> and <strong>{likesCount != 0 ? likesCount-1 : ""}</strong> others</span> : ""}
 
-                            <i
-                                className={`${reacted ? 'fas' : 'far'} fa-thumbs-up mx-2`}
-                                id="like"
-                                onClick={makeReact}
-                            >
-                            </i>
-                            <em className="count">
-                                {LikesCount}
-                            </em>
-                        </span>
+                                <i
+                                    className={`${reacted ? 'fas' : 'far'} fa-thumbs-up mx-2`}
+                                    id="like"
+                                    onClick={makeReact}
+                                >
+                                </i>
+                                <em className="count">
+                                    {LikesCount}
+                                </em>
+                            </span>
+                        </div>
                     </div>
                 </div>
             </div>

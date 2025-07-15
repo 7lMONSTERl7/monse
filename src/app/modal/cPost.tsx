@@ -19,13 +19,14 @@ function PostModal({ url,createPost,postData,setPostData,setCreatePost,setPosts,
     async function publishPost(){
         const Req = new Requests
         try{
+            log([...logs,"Publishing ...."])
             await Req.publishPost(postData,setCreatePost,logs,log)
             const data = await Req.getPosts(url+"/api/posts/")
             log([...logs,"Post Published Successfuly !!!"])
             setPosts();
             
-        }catch{
-            log([...logs,'Post not published !!!'])
+        }catch (e:any){
+            log([...logs,e.message])
         }
         
 

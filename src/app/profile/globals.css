@@ -3,14 +3,30 @@
   height: fit-content !important;
 }
 
+.posts-container{
+  width: 91%;
+}
+
 .heading {
   height: 4em;
 }
 
+.card{
+  width: 90%;
+  align-self: center;
+}
+
+.card-header{
+  position: relative;
+}
+
+.user-container{
+  padding-bottom: 2em;
+}
+
 .img-thumbnail {
-  position: absolute;
-  bottom: -30%;
   align-items: stretch;
+  border: 5px solid #ccc;
 }
 
 .css {
@@ -39,4 +55,59 @@
     font-size: 0.8em !important;
   }
   
-}/*# sourceMappingURL=globals.css.map */
+}
+
+.icon{
+  margin: 0 1em;
+}
+
+.friendBtn{
+  background-color: #a200ff;
+  color: #fff;
+  border: transparent;
+  padding: 0.5em 1em;
+  border-radius: 10px !important;
+  margin-left: 1em;
+  font-weight: 600;
+  font-family: sans-serif;
+  font-size: 0.85em;
+}
+
+.friendBtn.checked{
+  background-color: #f4d1ff !important;
+  color: #a200ff !important;
+  border: 2px solid #a200ff;
+}
+
+.checkIcon{
+  margin-left: 0.3em;
+}
+
+.cover-pic{
+  box-shadow: 2px 2px 20px #000;
+  border-radius: 10px;
+}
+
+.admin{
+  color: #a200ff;
+  font-weight: bold;
+  font-size: 1.3em;
+  font-family: 'Courier New', Courier, monospace;
+}
+
+.pio{
+  padding: 1em;
+}
+
+#admin-pic{
+  border: 5px solid #6800a5 !important;
+}
+.interactions{
+  display: flex;
+  justify-content: space-between;
+  padding: 0 2em;
+}
+#react i{
+  font-size: 1.5em;
+}
+/*# sourceMappingURL=globals.css.map */

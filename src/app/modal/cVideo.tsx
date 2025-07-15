@@ -18,12 +18,13 @@ interface Video{
 function VideoModal({ url,createVideo,videoData,setVideoData,setCreateVideo,setVideos,logs ,log}:Video){
     async function publishVideo(){
         try{
+            log([...logs,"Publishing please wait ...."])
             const Req = new Requests
             await Req.publishVideo(videoData,setCreateVideo, logs,log)
             log([...logs,"Post Published Successfuly !!!"])
             await Req.getPosts(url)
-        }catch{
-            log([...logs,'Video not published !!!'])
+        }catch (e:any){
+            log([...logs,e.message])
         }
     }
     return (

@@ -27,7 +27,7 @@ class Requests {
             }
         });
         const data = await res.json();
-        return data[0];
+        return data;
     }
 
     async getMyInfo() {
@@ -193,9 +193,9 @@ class Requests {
 
     async publishPost(postData: any, setCreatePost: any,logs:any[],log:any) {
         const { title, body, img } = postData;
-        if (!(title||body||img)){
-            alert('Please fill all the fields !!!')
-            return 
+        if (!title||!body||!img){
+            throw new Error("Please fill all the fields !!!");
+            
         }
         const token = localStorage.getItem('token');
         const formData = new FormData();
@@ -218,6 +218,9 @@ class Requests {
 
     async publishVideo(videoData: any, setCreateVideo: any, logs:any[],log:any) {
         const { title, body, video } = videoData;
+        if (!title||!body||!video){
+            throw new Error("Please fill all the fields !!!");
+        }
         const token = localStorage.getItem('token');
         const formData = new FormData();
         formData.append('title', title);
@@ -370,12 +373,27 @@ class Requests {
             headers: {
                 "Content-Type": "application/json",
                 'Authorization': `Token ${this.token}`,
-                "ngrok-skip-browser-warning": "true"
             },
             body: JSON.stringify({
                 "receiver": receiver,
             })
         });
+    }
+
+    async startFriendship(user:any){
+        const res = await fetch(`${this.url}/api/friendship/`,{
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Token ${this.token}`,
+            },
+            body: JSON.stringify({
+                "receiver": user,
+            })
+        });
+        if (res.status == 201){return true}
+        if (res.status == 204){return false}
+        return null
     }
 }
 
