@@ -31,6 +31,8 @@ interface Post {
     setReacted: any,
     liked: boolean,
     likes: any,
+    post_type: boolean,
+    external_img: string,
     me: any,
 }
 
@@ -252,7 +254,15 @@ export default function Home() {
                                     user={post?.author.username}
                                     title={post?.title || ''}
                                     userImg={`${baseUrl}${post?.author.profile_picture}`}
-                                    postImg={ post.img && post.img !== undefined ? baseUrl + post.img : null}
+                                    postImg={ 
+                                        ()=>{
+                                            if (post.post_type){return post.external_img}
+                                            else if(post.img && post.img !== undefined){return baseUrl + post.img}
+                                            else {
+                                                return ""
+                                            }
+                                        }
+                                    }
                                     postContent={post.body}
                                     postComments={post.comments_count}
                                     ago={post.created_at}
