@@ -166,7 +166,11 @@ function Profile() {
                                     user={userInfo.username}
                                     title={post?.title || ''}
                                     userImg={userInfo.profile_picture}
-                                    postImg={ post.img && post.img !== undefined ? post.img : null}
+                                    postImg={
+                                        post.post_type == false ?
+                                            post.img && post.img !== undefined ? baseUrl + post.img
+                                            : ""
+                                        : post.external_img}
                                     postContent={post.body}
                                     postComments={post.comments_count}
                                     ago={post.created_at}

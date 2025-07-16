@@ -23,6 +23,7 @@ function Posts(){
             username:'',
             profile_picture:'',
         },
+        post_type: false,
         comments:[]
     })
 
@@ -77,7 +78,11 @@ function Posts(){
                                 user={postData.author.username}
                                 title={postData.title}
                                 userImg={`${url}${postData.author.profile_picture}`}
-                                postImg={`${url}${postData.img}`}
+                                postImg={
+                                        postData.post_type == false ?
+                                            postData.img && postData.img !== undefined ? url + postData.img
+                                            : ""
+                                        : postData.external_img}
                                 postContent={postData.body}
                                 commentsCount={postData.comments_count ? postData.comments_count : 0}
                                 postComments={postData.comments}

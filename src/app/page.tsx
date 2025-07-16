@@ -255,14 +255,10 @@ export default function Home() {
                                     title={post?.title || ''}
                                     userImg={`${baseUrl}${post?.author.profile_picture}`}
                                     postImg={ 
-                                        ()=>{
-                                            if (post.post_type){return post.external_img}
-                                            else if(post.img && post.img !== undefined){return baseUrl + post.img}
-                                            else {
-                                                return ""
-                                            }
-                                        }
-                                    }
+                                        post.post_type == false?
+                                            post.img && post.img !== undefined ? baseUrl + post.img
+                                            : ""
+                                        : post.external_img}
                                     postContent={post.body}
                                     postComments={post.comments_count}
                                     ago={post.created_at}
