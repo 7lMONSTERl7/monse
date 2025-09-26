@@ -16,6 +16,7 @@ interface NavParams {
     Me: any | undefined,
     log: any,
     logs: String[],
+    setLang: Dispatch<SetStateAction<string>>,
 }
 
 interface userDataParams {
@@ -26,10 +27,12 @@ interface userDataParams {
 
 function Nav({
     page, url, Me, authStatus, setShowModal, setShowRegister, setAuthStatus,
-    mode, setMode, logs, log
+    mode, setMode, logs, log,setLang
 }: NavParams) {
     const [localMode, setLocalMode] = useState<boolean>(false);
     const [userData, setUserData] = useState<userDataParams | undefined>();
+
+    
 
     useEffect(() => {
         if (typeof window !== 'undefined') {
@@ -49,7 +52,7 @@ function Nav({
         if (typeof window !== 'undefined') {
             const token = localStorage.getItem('token');
             const me = localStorage.getItem('me');
-            
+            const lang = localStorage.getItem('lang')
             if (token && me) {
                 setAuthStatus(true);
                 setUserData(JSON.parse(me));
@@ -124,6 +127,16 @@ function Nav({
                             <ul className='dropdown-menu'>
                                 <li>
                                     <a className="dropdown-item" href="#">MonsTer AI</a>
+                                </li>
+                                 <li className="dropdown-item">
+                                    <span>Translation</span>
+                                    <label className="switch d-flex align-items-center">
+                                        <select name="language" id="lang" onChange={(e)=>{e.target.value}}>
+                                            <option value="ar">AR</option>
+                                            <option value="en">EN</option>
+                                            <option value="fr">FR</option>
+                                        </select>
+                                    </label>
                                 </li>
                                 <li className="dropdown-item">
                                     <span>Appearance</span>

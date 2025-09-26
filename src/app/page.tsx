@@ -10,6 +10,7 @@ import PostModal from './modal/cPost';
 import VideoModal from './modal/cVideo';
 import RegisterModal from './modal/register';
 import { Requests } from './utiles/Requests';
+import { translate } from '@vitalets/google-translate-api';
 import Image from 'next/image'
 
 import { useEffect, useRef, useState } from 'react';
@@ -69,6 +70,7 @@ export default function Home() {
     const [i, setMe ] = useState<any >({})
     const [hasMore, setHasMore] = useState<boolean>(true);
     const [logs,setLog] = useState<any[]>([])
+    const [lang,setLang] = useState<string>("en")
     const loaderRef = useRef<any>()
 
     useEffect(() => {
@@ -241,6 +243,7 @@ export default function Home() {
                             page=''
                             logs={logs}
                             log={setLog}
+                            setLang={setLang}
                         />
                     </div>
                     <div className="posts d-flex flex-column align-items-center mt-5 pt-5 " >
@@ -265,6 +268,7 @@ export default function Home() {
                                     likesCount={post.likes_count}
                                     isReacted={post.liked}
                                     likes={post.likes}
+                                    translate={translate}
                                     me={i.id}
                                 />
                             )) : 

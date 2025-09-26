@@ -18,14 +18,16 @@ interface PostProps {
     ago: string;
     likesCount: number;
     isReacted: boolean;
+    translate:any;
     likes: any;
     me: any,
 }
 
-function Post({ me,postID, authorId, user, title, userImg, postImg, postContent, postComments, ago, likes,likesCount}: PostProps) {
+function Post({ me,postID, authorId, user, title, userImg, postImg, postContent, postComments, ago, likes,translate,likesCount}: PostProps) {
     const [reacted, setReacted] = useState<boolean>(false);
     const [LikesCount, setLikesCount] = useState<number>(likesCount);
     const [reacts,setReacts] = useState<number[]>([])
+    const [translated, setTranslated] = useState<String>('')
     function allLikes(){
         if (likes) {
             const reactIds = likes.map((like: any) => like.author.id);
@@ -42,7 +44,19 @@ function Post({ me,postID, authorId, user, title, userImg, postImg, postContent,
         const Req = new Requests()
         await Req.postReact(true,postID, reacted, setReacted, setLikesCount,LikesCount);
     }
-   
+
+    async function translateTo(paragraph: any) {
+        let translaedContent = ""
+        try{
+            translaedContent = await translate(paragraph, { to: 'ar' })
+        }catch{
+            translaedContent = "sorry , Unable to translate for the moment !!!, try again later"
+        }
+        setTranslated("translation : "+translaedContent);
+    }
+  
+
+
     useEffect(()=>{
         allLikes()
     }, [likes])
@@ -84,7 +98,15 @@ function Post({ me,postID, authorId, user, title, userImg, postImg, postContent,
                 </div>
                 
                 <h5 className="card-title mt-4">{title}</h5>
-                <p className="card-text">{postContent}</p>
+                <p className="card-text">
+                    {postContent}
+                    <br/>
+                    <div className="btn btn-primary" onClick={()=>{translateTo(postContent)}}>Translate</div>
+     
+                    <br />
+                    {translated}
+                    
+                </p>
                 <div className="d-flex justify-content-between align-items-center">
                     <div className="post-details mt-3 position-relative w-100">
                         <hr />
