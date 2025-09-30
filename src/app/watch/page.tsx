@@ -10,7 +10,7 @@ import VideoModal from './../modal/cVideo'
 import Log from './../log/log';
 import RegisterModal from './../modal/register'
 import { Requests } from './../utiles/Requests'
-import { useEffect, useRef, useState } from 'react';
+import { SetStateAction, useEffect, useRef, useState } from 'react';
 import { isArray } from 'util'
 
 interface Video{
@@ -216,10 +216,10 @@ export default function Home() {
                             setShowModal={setShowModal}
                             setShowRegister={setShowRegister}
                             mode={mode}
-                            setMode={setMode} 
+                            setMode={setMode}
                             Me={i}
                             logs={logs}
-                            log={setLog}               
+                            log={setLog}
                             />
                     </div>
                     <div className="posts d-flex flex-column align-items-center mt-5 pt-5">

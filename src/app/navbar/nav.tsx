@@ -16,7 +16,7 @@ interface NavParams {
     Me: any | undefined,
     log: any,
     logs: String[],
-    setLang: Dispatch<SetStateAction<string>>,
+    //setLang: Dispatch<SetStateAction<string>>,
 }
 
 interface userDataParams {
@@ -27,7 +27,7 @@ interface userDataParams {
 
 function Nav({
     page, url, Me, authStatus, setShowModal, setShowRegister, setAuthStatus,
-    mode, setMode, logs, log,setLang
+    mode, setMode, logs, log,/*setLang*/
 }: NavParams) {
     const [localMode, setLocalMode] = useState<boolean>(false);
     const [userData, setUserData] = useState<userDataParams | undefined>();

@@ -243,7 +243,7 @@ export default function Home() {
                             page=''
                             logs={logs}
                             log={setLog}
-                            setLang={setLang}
+                            //setLang={setLang}
                         />
                     </div>
                     <div className="posts d-flex flex-column align-items-center mt-5 pt-5 " >

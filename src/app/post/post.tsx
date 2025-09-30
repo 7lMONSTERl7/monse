@@ -45,15 +45,21 @@ function Post({ me,postID, authorId, user, title, userImg, postImg, postContent,
         await Req.postReact(true,postID, reacted, setReacted, setLikesCount,LikesCount);
     }
 
-    async function translateTo(paragraph: any) {
-        let translaedContent = ""
-        try{
-            translaedContent = await translate(paragraph, { to: 'ar' })
-        }catch{
-            translaedContent = "sorry , Unable to translate for the moment !!!, try again later"
+    async function translateTo(paragraph: string) {
+        try {
+            const res = await fetch(`/api/translate?text=${encodeURIComponent(paragraph)}&to=ar`);
+            const data = await res.json();
+
+            if (data.translated) {
+            setTranslated("translation: " + data.translated);
+            } else {
+            setTranslated("sorry, Unable to translate for the moment !!!, try again later");
+            }
+        } catch {
+            setTranslated("sorry, Unable to translate for the moment !!!, try again later");
         }
-        setTranslated("translation : "+translaedContent);
     }
+
   
 
 

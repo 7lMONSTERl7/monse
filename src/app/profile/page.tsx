@@ -6,6 +6,7 @@ import './../globals.css'
 import './globals.css';
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import { translate } from '@vitalets/google-translate-api';
 import Nav from './nav/nav';
 import Button from './friendBtn/button';
 import Post from '../post/post';
@@ -177,6 +178,7 @@ function Profile() {
                                     likesCount={post.likes_count}
                                     isReacted={post.liked}
                                     likes={post.likes}
+                                    translate={translate}
                                     me={userInfo.id}
                                 />
                             )) : 
