@@ -133,7 +133,11 @@ function Nav({
                                     <label className="switch d-flex align-items-center">
                                         <select name="language" 
                                             id="lang"
-                                            value={localStorage.getItem('lang') ? ""+localStorage.getItem('lang') : "en"}
+                                            value={
+                                                typeof window !== "undefined" && localStorage.getItem("lang") 
+                                                ? ""+localStorage.getItem("lang") 
+                                                : "en"
+                                            }
                                             onChange={
                                                 (e)=>{
                                                     localStorage.setItem('lang',e.target.value)
