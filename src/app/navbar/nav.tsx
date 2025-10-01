@@ -16,7 +16,7 @@ interface NavParams {
     Me: any | undefined,
     log: any,
     logs: String[],
-    //setLang: Dispatch<SetStateAction<string>>,
+    setLang: Dispatch<SetStateAction<string>>,
 }
 
 interface userDataParams {
@@ -27,7 +27,7 @@ interface userDataParams {
 
 function Nav({
     page, url, Me, authStatus, setShowModal, setShowRegister, setAuthStatus,
-    mode, setMode, logs, log,/*setLang*/
+    mode, setMode, logs, log,setLang
 }: NavParams) {
     const [localMode, setLocalMode] = useState<boolean>(false);
     const [userData, setUserData] = useState<userDataParams | undefined>();
@@ -131,10 +131,32 @@ function Nav({
                                  <li className="dropdown-item">
                                     <span>Translation</span>
                                     <label className="switch d-flex align-items-center">
-                                        <select name="language" id="lang" onChange={(e)=>{e.target.value}}>
-                                            <option value="ar">AR</option>
-                                            <option value="en">EN</option>
-                                            <option value="fr">FR</option>
+                                        <select name="language" 
+                                            id="lang"
+                                            value={localStorage.getItem('lang') ? ""+localStorage.getItem('lang') : "en"}
+                                            onChange={
+                                                (e)=>{
+                                                    localStorage.setItem('lang',e.target.value)
+                                                    setLang(e.target.value)
+                                                }
+                                            }
+                                            style={{"width":"8em"}}
+                                        >
+                                            <option value="ar">AR - Arabic</option>
+                                            <option value="en">EN - English</option>
+                                            <option value="fr">FR - French</option>
+                                            <option value="es">ES - Spanish</option>
+                                            <option value="de">DE - German</option>
+                                            <option value="it">IT - Italian</option>
+                                            <option value="pt">PT - Portuguese</option>
+                                            <option value="ru">RU - Russian</option>
+                                            <option value="ja">JA - Japanese</option>
+                                            <option value="ko">KO - Korean</option>
+                                            <option value="hi">HI - Hindi</option>
+                                            <option value="tr">TR - Turkish</option>
+                                            <option value="nl">NL - Dutch</option>
+                                            <option value="zh-cn">ZH - Chinese (Simplified)</option>
+                                            <option value="zh-tw">ZH-TW - Chinese (Traditional)</option>
                                         </select>
                                     </label>
                                 </li>

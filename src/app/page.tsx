@@ -124,6 +124,16 @@ export default function Home() {
         
     }, [token]);
 
+
+    useEffect(()=>{
+        let defaultLang = localStorage.getItem('lang')
+        if (!defaultLang){
+            localStorage.setItem('lang',"en")
+            defaultLang = "en"
+        }
+        setLang(defaultLang)
+        
+    }, [])
     
     useEffect(() => {
         getPosts();
@@ -243,7 +253,7 @@ export default function Home() {
                             page=''
                             logs={logs}
                             log={setLog}
-                            //setLang={setLang}
+                            setLang={setLang}
                         />
                     </div>
                     <div className="posts d-flex flex-column align-items-center mt-5 pt-5 " >
@@ -270,6 +280,7 @@ export default function Home() {
                                     likes={post.likes}
                                     translate={translate}
                                     me={i.id}
+                                    lang={lang}
                                 />
                             )) : 
                                 <div className="card card-ph h-75 card shadow mb-5 mt-4" aria-hidden="true">

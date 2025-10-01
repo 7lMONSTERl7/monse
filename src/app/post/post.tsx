@@ -21,9 +21,10 @@ interface PostProps {
     translate:any;
     likes: any;
     me: any,
+    lang: string,
 }
 
-function Post({ me,postID, authorId, user, title, userImg, postImg, postContent, postComments, ago, likes,translate,likesCount}: PostProps) {
+function Post({ me,postID, authorId, user, title, userImg, postImg, postContent, postComments, ago, likes,translate,likesCount,lang}: PostProps) {
     const [reacted, setReacted] = useState<boolean>(false);
     const [LikesCount, setLikesCount] = useState<number>(likesCount);
     const [reacts,setReacts] = useState<number[]>([])
@@ -47,7 +48,7 @@ function Post({ me,postID, authorId, user, title, userImg, postImg, postContent,
 
     async function translateTo(paragraph: string) {
         try {
-            const res = await fetch(`/api/translate?text=${encodeURIComponent(paragraph)}&to=ar`);
+            const res = await fetch(`/api/translate?text=${encodeURIComponent(paragraph)}&to=${lang}`);
             const data = await res.json();
 
             if (data.translated) {
@@ -59,9 +60,6 @@ function Post({ me,postID, authorId, user, title, userImg, postImg, postContent,
             setTranslated("sorry, Unable to translate for the moment !!!, try again later");
         }
     }
-
-  
-
 
     useEffect(()=>{
         allLikes()

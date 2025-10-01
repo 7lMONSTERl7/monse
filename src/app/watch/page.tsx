@@ -71,6 +71,7 @@ export default function Home() {
     const [url,setUrl] = useState<string>(baseUrl + '/api/videos/')
     const [hasMore,setHasMore] = useState<boolean>(true)
     const [logs,setLog] = useState<any[]>([])
+    const [lang,setLang] = useState<string>("en")
     const [i, setMe ] = useState<any>([])
     const loaderRef = useRef<any>()
     
@@ -220,6 +221,7 @@ export default function Home() {
                             Me={i}
                             logs={logs}
                             log={setLog}
+                            setLang={setLang}
                             />
                     </div>
                     <div className="posts d-flex flex-column align-items-center mt-5 pt-5">

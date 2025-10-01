@@ -22,6 +22,7 @@ function Profile() {
     const [friends,setFriends] = useState<number>(0)
     const [loading, setLoading] = useState<boolean>(true)
     const [posts , setPosts] = useState<any[]>([])
+    const [lang,setLang] = useState<string>("en")
 
     async function init() {
         const Id = searchParams.get('id');
@@ -180,6 +181,7 @@ function Profile() {
                                     likes={post.likes}
                                     translate={translate}
                                     me={userInfo.id}
+                                    lang={lang}
                                 />
                             )) : 
                                 <div className="card card-ph h-75 card shadow mb-5 mt-4" aria-hidden="true">  
